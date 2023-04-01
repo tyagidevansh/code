@@ -11,7 +11,7 @@ a = 100
 b = 350
 c = 600
 winner = ' '
-movedict = {'1' : [0,1], '2': [0,1], '3': [0,2], '4' : [1,0], '5' : [1,1], '6': [1,2], '7' : [2,0], '8': [2,1], '9': [2,2]}
+movedict = {'1' : [0,0], '2': [0,1], '3': [0,2], '4' : [1,0], '5' : [1,1], '6': [1,2], '7' : [2,0], '8': [2,1], '9': [2,2]}
 
 window = Tk()
 window.title("Tic Tac Toe")
@@ -43,9 +43,8 @@ def button_clicked(event):
     print("test", x2, y2)
     board[x2][y2] = 'X'
     checkWinner()
-    if freespaces> 0:
+    if winner == ' ':
         computerMove()
-        checkWinner()
     
 def GUI():
     line1 = canvas.create_line(a,325,850,325, width = 7, fill = 'white')
@@ -90,6 +89,8 @@ def GUI():
     button9.place(x = c+10,y =c)
     button9.bind("<Button-1>", button_clicked)
     
+    window.mainloop()
+    
     
 def resetBoard():
     global board, freespaces
@@ -116,24 +117,30 @@ def playerMove(x2,y2):
         freespaces -= 1
     
 def computerMove():
-    global freespaces, board, movedict
+    global freespaces, movedict, winner
     if freespaces > 0:
         while True:
-            x = random.randint(0, 2)
-            y = random.randint(0, 2)
-            if board[x][y] == ' ':
-                board[x][y] = 'O'
-                freespaces -= 1
-                val = [x,y]
-                for key, val in movedict.items():
-                    if val == value:
-                        return key
-                button = "button"    
-                button_name = button + key
+            row = random.randint(0, 2)
+            col = random.randint(0, 2)
+            if board[row][col] == ' ':
+                button_num = list(movedict.keys())[list(movedict.values()).index([row, col])]
+                button_name = "button" + button_num
                 button = canvas.nametowidget(button_name)
+                print("Computer chooses square", button_num)
+                x1 = button.winfo_x()
+                y1 = button.winfo_y()
+                
+                board[row][col] = 'O'
                 button.destroy()
-                break
-            break
+                
+                img = PhotoImage(file=r"C:\Users\devan\OneDrive\Documents\code\python\graphics\O.png")
+                label = Label(canvas, image=img)
+                label.image = img
+                label.place(x=x1, y=y1-15)
+                
+                freespaces -= 1
+                return
+
             
     else:
         winner = ' '
