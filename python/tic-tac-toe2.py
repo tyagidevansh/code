@@ -21,7 +21,8 @@ canvas = Canvas(window, width = 950, height = 850, bg = 'gray12')
 canvas.pack()
 
 def button_clicked(event):
-    global freespaces, movedict
+    global freespaces, movedict, winner
+    winner = ' '
     button = event.widget
     button_name = button.winfo_name()
     button_num = button_name.replace("button", "")
@@ -42,9 +43,15 @@ def button_clicked(event):
     y2 = movedict[button_num][1]
     print("test", x2, y2)
     board[x2][y2] = 'X'
-    checkWinner()
-    if winner == ' ':
+    winner = checkWinner()
+    if winner:
+        print(f"{winner} wins!")
+    else:
         computerMove()
+        winner = checkWinner()
+        if winner:
+            print(f"{winner} wins!")
+        
     
 def GUI():
     line1 = canvas.create_line(a,325,850,325, width = 7, fill = 'white')
@@ -110,12 +117,7 @@ def checkFreeSpaces():
             if cell == ' ':
                 freespaces += 1
 
-def playerMove(x2,y2):
-    global freespaces
-    if x2 != None and y2 != None:
-        board[x2][y2] = 'X'
-        freespaces -= 1
-    
+
 def computerMove():
     global freespaces, movedict, winner
     if freespaces > 0:
@@ -166,6 +168,7 @@ def printWinner(winner):
         print("It's a tie.")
 
 def playGame():
+    
     resetBoard()
     while winner == ' ' and checkFreeSpaces() != 0:
         GUI()
