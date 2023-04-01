@@ -15,7 +15,11 @@ movedict = {'1' : [0,0], '2': [0,1], '3': [0,2], '4' : [1,0], '5' : [1,1], '6': 
 
 window = Tk()
 window.title("Tic Tac Toe")
-window.geometry("950x850")
+
+width = int(0.8*window.winfo_screenwidth())
+height = int(0.8*window.winfo_screenheight())
+
+window.geometry(f"{width}x{height}")
 window['bg'] = 'gray12'
 canvas = Canvas(window, width = 950, height = 850, bg = 'gray12')
 canvas.pack()
@@ -34,7 +38,7 @@ def button_clicked(event):
     print(x1, y1)
     button.destroy()
     
-    img = PhotoImage(file = r"C:\Users\devan\OneDrive\Documents\code\python\graphics\X.png")
+    img = PhotoImage(file = r"./X.png")
     label = Label(canvas, image=img)
     label.image = img
     label.place(x = x1,y = y1-15)
@@ -135,7 +139,7 @@ def computerMove():
                 board[row][col] = 'O'
                 button.destroy()
                 
-                img = PhotoImage(file=r"C:\Users\devan\OneDrive\Documents\code\python\graphics\O.png")
+                img = PhotoImage(file=r"./O.png")
                 label = Label(canvas, image=img)
                 label.image = img
                 label.place(x=x1, y=y1-15)
