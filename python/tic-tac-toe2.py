@@ -13,15 +13,17 @@ c = 600
 winner = ' '
 movedict = {'1' : [0,0], '2': [0,1], '3': [0,2], '4' : [1,0], '5' : [1,1], '6': [1,2], '7' : [2,0], '8': [2,1], '9': [2,2]}
 
-window = Tk()
-window.title("Tic Tac Toe")
-window.geometry("950x850")
-window['bg'] = 'gray12'
-canvas = Canvas(window, width = 950, height = 850, bg = 'gray12')
-canvas.pack()
+def boardinit():
+    global window, canvas
+    window = Tk()
+    window.title("Tic Tac Toe")
+    window.geometry("950x850")
+    window['bg'] = 'gray12'
+    canvas = Canvas(window, width = 950, height = 850, bg = 'gray12')
+    canvas.pack()
 
 def button_clicked(event):
-    global freespaces, movedict, winner
+    global freespaces, movedict, winner, window, canvas
     winner = ' '
     button = event.widget
     button_name = button.winfo_name()
@@ -56,6 +58,7 @@ def button_clicked(event):
     return winner
     
 def GUI():
+    global window, canvas
     line1 = canvas.create_line(a,325,850,325, width = 7, fill = 'white')
     line2 = canvas.create_line(a,575,850,575, width = 7, fill = 'white')
     line3 = canvas.create_line(b,75,b,825, width = 7, fill = 'white')
@@ -167,17 +170,17 @@ def victory():
     canvas2_toplevel.create_window((400, 100))
 
     canvas2_toplevel.create_text(20, 20, text = f"{winner} wins!", font=("Times New Roman", 30), fill="white", anchor="nw")
-    button = Button(canvas2_toplevel, text="Replay", command=destruction)
+    button = Button(canvas2_toplevel, text="destroy it lol idk", command=destruction)
     button.pack()
     window.mainloop()
-
 
 def destruction():
     for widget in window.winfo_children():
         widget.destroy()
-        rebuild()
+        play()
 
 def rebuild():
+    
     window = Tk()
     window.title("Tic Tac Toe")
     window.geometry("950x850")
@@ -186,8 +189,8 @@ def rebuild():
     canvas.pack()
     play()
 
-
 def play():
+    boardinit()
     resetBoard()
     while winner == ' ' and checkFreeSpaces() != 0:
         GUI()
