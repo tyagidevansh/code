@@ -46,12 +46,14 @@ def button_clicked(event):
     winner = checkWinner()
     if winner:
         print(f"{winner} wins!")
+        victory()
     else:
         computerMove()
         winner = checkWinner()
         if winner:
             print(f"{winner} wins!")
-        
+            victory()
+    return winner
     
 def GUI():
     line1 = canvas.create_line(a,325,850,325, width = 7, fill = 'white')
@@ -98,16 +100,10 @@ def GUI():
     
     window.mainloop()
     
-    
 def resetBoard():
     global board, freespaces
     board = [[' ']*3 for i in range(3)]
     freespaces = 9
-
-def printBoard():
-    for row in board:
-        print(' | '.join(row))
-    print("--------------")   
 
 def checkFreeSpaces():
     global freespaces
@@ -116,7 +112,6 @@ def checkFreeSpaces():
         for cell in row:
             if cell == ' ':
                 freespaces += 1
-
 
 def computerMove():
     global freespaces, movedict, winner
@@ -159,23 +154,45 @@ def checkWinner():
         return board[0][2]
     return None
 
-def printWinner(winner):
-    if winner == 'X':
-        print("Congratulations! You win!")
-    elif winner == 'O':
-        print("Sorry, you lose.")
-    else:
-        print("It's a tie.")
+def victory():
+    global winner
+    #makes another popup window, makes it toplevel and puts a canvas on it so i can place buttons
+    canvas2 = Canvas(window, width=400, height=100)
+    canvas2.pack()
+    toplevel = Toplevel(window)
+    toplevel.geometry('400x100+400+400') #window of 400x100, at (400,400)
+    toplevel.config(bg='gray12')
+    canvas2_toplevel = Canvas(toplevel, width=400, height=100, bg='gray12')
+    canvas2_toplevel.pack(fill=BOTH, expand=True)
+    canvas2_toplevel.create_window((400, 100))
 
-def playGame():
-    
+    canvas2_toplevel.create_text(20, 20, text = f"{winner} wins!", font=("Times New Roman", 30), fill="white", anchor="nw")
+    button = Button(canvas2_toplevel, text="Replay", command=destruction)
+    button.pack()
+    window.mainloop()
+
+
+def destruction():
+    for widget in window.winfo_children():
+        widget.destroy()
+        rebuild()
+
+def rebuild():
+    window = Tk()
+    window.title("Tic Tac Toe")
+    window.geometry("950x850")
+    window['bg'] = 'gray12'
+    canvas = Canvas(window, width = 950, height = 850, bg = 'gray12')
+    canvas.pack()
+    play()
+
+
+def play():
     resetBoard()
     while winner == ' ' and checkFreeSpaces() != 0:
         GUI()
-        printBoard()
-        if winner!= ' ' or checkFreeSpaces() == 0:
+        if winner != ' ' or checkFreeSpaces() == 0:
             break
-    printWinner(None)
 
-playGame()
+play()
 window.mainloop()
