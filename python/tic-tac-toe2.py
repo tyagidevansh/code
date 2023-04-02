@@ -3,13 +3,6 @@ from tkinter import *
 
 board = [[' ']*3 for i in range(3)]
 freespaces = 9
-x1 = None
-x2= None
-y1 = None
-y2 = None
-a = 100
-b = 350
-c = 600
 winner = ' '
 movedict = {'1' : [0,0], '2': [0,1], '3': [0,2], '4' : [1,0], '5' : [1,1], '6': [1,2], '7' : [2,0], '8': [2,1], '9': [2,2]}
 
@@ -36,28 +29,40 @@ def button_clicked(event):
     print(x1, y1)
     button.destroy()
     
-    img = PhotoImage(file = r"C:\Users\devan\OneDrive\Documents\code\python\graphics\X.png")
+    if freespaces % 2 == 0:  # even freespaces means it's O's turn
+        img = PhotoImage(file = r"C:\Users\devan\OneDrive\Documents\code\python\graphics\O.png")
+        board[movedict[button_num][0]][movedict[button_num][1]] = 'O'
+    else:  # odd freespaces means it's X's turn
+        img = PhotoImage(file = r"C:\Users\devan\OneDrive\Documents\code\python\graphics\X.png")
+        board[movedict[button_num][0]][movedict[button_num][1]] = 'X'
+    freespaces -= 1
+
     label = Label(canvas, image=img)
     label.image = img
-    label.place(x = x1,y = y1-15)
-    
-    x2 = movedict[button_num][0]
-    y2 = movedict[button_num][1]
-    print("test", x2, y2)
-    board[x2][y2] = 'X'
+    label.place(x=x1, y=y1-15)
+
     winner = checkWinner()
     if winner:
         print(f"{winner} wins!")
         victory()
+    elif freespaces == 0:
+        print("It's a draw!")
+        draw()
     else:
         computerMove()
         winner = checkWinner()
         if winner:
             print(f"{winner} wins!")
             victory()
-    return winner
+        elif freespaces == 0:
+            print("It's a draw!")
+            draw()
+    return freespaces
     
 def GUI():
+    a = 100
+    b = 350
+    c = 600
     global window, canvas
     line1 = canvas.create_line(a,325,850,325, width = 7, fill = 'white')
     line2 = canvas.create_line(a,575,850,575, width = 7, fill = 'white')
@@ -107,14 +112,6 @@ def resetBoard():
     global board, freespaces
     board = [[' ']*3 for i in range(3)]
     freespaces = 9
-
-def checkFreeSpaces():
-    global freespaces
-    freespaces = 0
-    for row in board:
-        for cell in row:
-            if cell == ' ':
-                freespaces += 1
 
 def computerMove():
     global freespaces, movedict, winner
@@ -174,6 +171,23 @@ def victory():
     button.pack()
     window.mainloop()
 
+def draw():
+    global winner
+    #makes another popup window, makes it toplevel and puts a canvas on it so i can place buttons
+    canvas2 = Canvas(window, width=400, height=150)
+    canvas2.pack()
+    toplevel = Toplevel(window)
+    toplevel.geometry('400x150+400+400') #window of 400x100, at (400,400)
+    toplevel.config(bg='gray12')
+    canvas2_toplevel = Canvas(toplevel, width=400, height=150, bg='gray12')
+    canvas2_toplevel.pack(fill=BOTH, expand=True)
+    canvas2_toplevel.create_window((400, 150))
+
+    canvas2_toplevel.create_text(20, 80, text = "It's a draw!", font=("Times New Roman", 35), fill="white", anchor="nw")
+    button = Button(canvas2_toplevel, text="Play again", font=("Times New Roman", 25), fg = "white", bg = 'gray12', activebackground='gray12', command=destruction)
+    button.pack()
+    window.mainloop()
+
 def destruction():
     global window, winner
     winner = ' '
@@ -183,9 +197,9 @@ def destruction():
 def play():
     boardinit()
     resetBoard()
-    while winner == ' ' and checkFreeSpaces() != 0:
+    while winner == ' ' and freespaces > 0:
         GUI()
-        if winner != ' ' or checkFreeSpaces() == 0:
+        if winner != ' ' or freespaces == 0:
             break
 
 play()
