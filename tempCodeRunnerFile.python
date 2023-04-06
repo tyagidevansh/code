@@ -1,19 +1,12 @@
-from tkinter import *
+def recur_palin(s):
+    if len(s) == 0 or len(s) == 1:
+        return True
+    if s[0] == s[len(s)-1]:
+        return recur_palin(s[1:len(s)-1])
+    return False
 
-winner = 'X'
-window = Tk()
-window.title("Tic Tac Toe")
-window.geometry("950x850")
-canvas2 = Canvas(window, width=400, height=100)
-canvas2.pack()
-toplevel = Toplevel(window)
-toplevel.geometry('400x100+400+400') #window of 400x100, at (400,400)
-toplevel.config(bg='gray12')
-canvas2_toplevel = Canvas(toplevel, width=400, height=100, bg='gray12')
-canvas2_toplevel.pack(fill=BOTH, expand=True)
-canvas2_toplevel.create_window((400, 100))
-
-canvas2_toplevel.create_text(20, 20, text = "{winner} wins!", font=("Times New Roman", 30), fill="white", anchor="nw", smooth=True)
-button = Button(canvas2_toplevel, text="click me")
-button.pack()
-window.mainloop()
+s = input("Enter a string: ")
+if recur_palin(s) == True:
+    print("its a palindrome")
+else:
+    print("not a palindrome")

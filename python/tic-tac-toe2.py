@@ -1,5 +1,7 @@
 import random
+import math
 from tkinter import *
+import sqlite3
 
 board = [[' ']*3 for i in range(3)]
 freespaces = 9
@@ -45,6 +47,7 @@ def button_clicked(event):
     if winner:
         print(f"{winner} wins!")
         victory()
+        #update_win_count('X')
     elif freespaces == 0:
         print("It's a draw!")
         draw()
@@ -194,13 +197,58 @@ def destruction():
     window.destroy()
     play()
 
+def create_table():
+    conn = sqlite3.connect('tic_tac_toe.db')
+    c = conn.cursor()
+    c.execute('CREATE TABLE IF NOT EXISTS win_counts(player TEXT, wins INT)')
+    conn.commit()
+    conn.close()
+
+def update_win_count(player):
+    conn = sqlite3.connect('tic_tac_toe.db')
+    c = conn.cursor
+    c.execute('SELECT wins FROM win_counts WHERE player = ?', (player,))
+    row = c.fetchone()
+    if row is None:
+        c.Execute('INSERT INTO win_counts VALUES (?,1)', (player,))
+    else:
+        wins = row[0]+1
+        c.execute('UPDATE win_counts SET wins = ? WHERE player = ?', (wins, player))
+    conn.commit()
+    conn.close()
+
+def get_win_counts():
+    conn = sqlite3.connect('tic_tac_toe.db')
+    c = conn.cursor()
+    c.execute('SELECT player, wins FROM win_counts')
+    win_counts = dict(c.fetchall())
+    conn.close()
+    print(win_counts)
+
+def best_move():
+    bestscore = -math.inf
+    move = 0
+    for i in range(0,3):
+        for j in range(0,3):
+            if board[i][j] == ' ':
+                board[i][j] = 'O'
+                score = minimax(board, 0, false)
+                board[i][j]= ' '
+                if score > bestscore:
+                    bestscore = score
+                    move = [i,j]
+    board[move[0]][move[1]]
+                
+
 def play():
+    #create_table()
     boardinit()
     resetBoard()
     while winner == ' ' and freespaces > 0:
         GUI()
         if winner != ' ' or freespaces == 0:
             break
+    #get_win_counts()
 
 play()
 window.mainloop()
