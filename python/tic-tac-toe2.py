@@ -1,4 +1,3 @@
-import random
 import math
 from tkinter import *
 import sqlite3
@@ -7,6 +6,7 @@ board = [[' ']*3 for i in range(3)]
 freespaces = 9
 winner = ' '
 movedict = {'1' : [0,0], '2': [0,1], '3': [0,2], '4' : [1,0], '5' : [1,1], '6': [1,2], '7' : [2,0], '8': [2,1], '9': [2,2]}
+scores = {'X':-2, 'O':2, ' ' : 0}
 
 def boardinit():
     global window, canvas
@@ -119,43 +119,50 @@ def resetBoard():
 def computerMove():
     global freespaces, movedict, winner
     if freespaces > 0:
-        while True:
-            row = random.randint(0, 2)
-            col = random.randint(0, 2)
-            if board[row][col] == ' ':
-                button_num = list(movedict.keys())[list(movedict.values()).index([row, col])]
-                button_name = "button" + button_num
-                button = canvas.nametowidget(button_name)
-                print("Computer chooses square", button_num)
-                x1 = button.winfo_x()
-                y1 = button.winfo_y()
-                
-                board[row][col] = 'O'
-                button.destroy()
-                
-                img = PhotoImage(file=r"C:\Users\devan\OneDrive\Documents\code\python\graphics\O.png")
-                label = Label(canvas, image=img)
-                label.image = img
-                label.place(x=x1, y=y1-15)
-                
-                freespaces -= 1
-                return
-
-            
+        best_move()
+        row = move[0]
+        col = move[1]
+        while board[row][col] != ' ':
+            best_move()
+            row = move[0]
+            col = move[1]
+        button_num = list(movedict.keys())[list(movedict.values()).index([row, col])]
+        button_name = "button" + button_num
+        button = canvas.nametowidget(button_name)
+        print("Computer chooses square", button_num)
+        x1 = button.winfo_x()
+        y1 = button.winfo_y()
+        
+        board[row][col] = 'O'
+        button.destroy()
+        
+        img = PhotoImage(file=r"C:\Users\devan\OneDrive\Documents\code\python\graphics\O.png")
+        label = Label(canvas, image=img)
+        label.image = img
+        label.place(x=x1, y=y1-15)
+        
+        freespaces -= 1
     else:
         winner = ' '
 
 def checkWinner():
+    global freespaces
     for i in range(3):
+        #check rows
         if board[i][0] == board[i][1] == board[i][2] and board[i][0] != ' ':
             return board[i][0]
+        #check columns
         if board[0][i] == board[1][i] == board[2][i] and board[0][i] != ' ':
             return board[0][i]
+    #check diagonals
     if board[0][0] == board[1][1] == board[2][2] and board[0][0] != ' ':
         return board[0][0]
     if board[0][2] == board[1][1] == board[2][0] and board[0][2] != ' ':
         return board[0][2]
-    return None
+    #no winner if you run out of freespaces before anyone wins, not sure if it works
+    if freespaces == 0:
+        return ' '
+    #return None (old ver)
 
 def victory():
     global winner
@@ -226,20 +233,46 @@ def get_win_counts():
     print(win_counts)
 
 def best_move():
-    bestscore = -math.inf
-    move = 0
+    global move, bestScore
+    bestScore = -math.inf
+    move = [0,0]
     for i in range(0,3):
         for j in range(0,3):
             if board[i][j] == ' ':
-                board[i][j] = 'O'
-                score = minimax(board, 0, false)
-                board[i][j]= ' '
-                if score > bestscore:
-                    bestscore = score
-                    move = [i,j]
-    board[move[0]][move[1]]
-                
+                board[i][j] = 'O' # make a move for the AI
+                score = minimax(board,0,False) # calculate score
+                board[i][j] = ' ' # undo the move
+                if score > bestScore:
+                    bestScore = score
+                    move = [i, j]
+    return move 
 
+def minimax(board, depth, isMaximising):
+    result = checkWinner()
+    if result:
+        return scores[result]
+    
+    if isMaximising:
+        bestScore = -math.inf       
+        for i in range(0,3):
+            for j in range(0,3):
+                if board[i][j] == ' ':
+                    board[i][j] = 'O' # make a move for the AI
+                    score = minimax(board, depth +1, False) # calculate score
+                    board[i][j] = ' ' # undo the move
+                    bestScore = max(score, bestScore)
+        return bestScore
+    else:
+        bestScore = math.inf
+        for i in range(0,3):
+            for j in range(0,3):
+                if board[i][j] == ' ':
+                    board[i][j] = 'X' # make a move for the human player
+                    score = minimax(board, depth +1, True) # calculate score
+                    board[i][j] = ' ' # undo the move
+                    bestScore = min(score, bestScore)
+        return bestScore     
+            
 def play():
     #create_table()
     boardinit()
@@ -251,4 +284,4 @@ def play():
     #get_win_counts()
 
 play()
-window.mainloop()
+window.mainloop() 

@@ -1,12 +1,3 @@
-def recur_palin(s):
-    if len(s) == 0 or len(s) == 1:
-        return True
-    if s[0] == s[len(s)-1]:
-        return recur_palin(s[1:len(s)-1])
-    return False
-
-s = input("Enter a string: ")
-if recur_palin(s) == True:
-    print("its a palindrome")
-else:
-    print("not a palindrome")
+for i in range(0,3):
+        for j in range(0,3):
+                print([i,j])
