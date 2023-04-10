@@ -6,7 +6,6 @@ board = [[' ']*3 for i in range(3)]
 freespaces = 9
 winner = ' '
 movedict = {'1' : [0,0], '2': [0,1], '3': [0,2], '4' : [1,0], '5' : [1,1], '6': [1,2], '7' : [2,0], '8': [2,1], '9': [2,2]}
-scores = {'X':-2, 'O':2, ' ' : 0}
 
 def boardinit():
     global window, canvas
@@ -43,26 +42,26 @@ def button_clicked(event):
     label.image = img
     label.place(x=x1, y=y1-15)
 
-    winner = checkWinner()
+    winner = checkWinner(board)
+    print("button click winner is", winner)
     if winner:
         print(f"{winner} wins!")
         victory()
         #update_win_count('X')
     elif freespaces == 0:
         print("It's a draw!")
-        draw()
     else:
         computerMove()
-        winner = checkWinner()
+        winner = checkWinner(board)
         if winner:
             print(f"{winner} wins!")
             victory()
         elif freespaces == 0:
             print("It's a draw!")
-            draw()
     return freespaces
     
 def GUI():
+    global canvas
     a = 100
     b = 350
     c = 600
@@ -117,35 +116,35 @@ def resetBoard():
     freespaces = 9
 
 def computerMove():
-    global freespaces, movedict, winner
+    global freespaces , movedict, winner
     if freespaces > 0:
-        best_move()
-        row = move[0]
-        col = move[1]
-        while board[row][col] != ' ':
-            best_move()
-            row = move[0]
-            col = move[1]
+        move = best_move(board, 'O')
+        row = move[0]-1
+        col = move[1]-1
+        
         button_num = list(movedict.keys())[list(movedict.values()).index([row, col])]
         button_name = "button" + button_num
         button = canvas.nametowidget(button_name)
         print("Computer chooses square", button_num)
         x1 = button.winfo_x()
         y1 = button.winfo_y()
-        
-        board[row][col] = 'O'
         button.destroy()
         
         img = PhotoImage(file=r"C:\Users\devan\OneDrive\Documents\code\python\graphics\O.png")
         label = Label(canvas, image=img)
         label.image = img
         label.place(x=x1, y=y1-15)
+        print(board)
         
         freespaces -= 1
+        
+        
+        
+        
     else:
         winner = ' '
 
-def checkWinner():
+def checkWinner(board):
     global freespaces
     for i in range(3):
         #check rows
@@ -161,7 +160,7 @@ def checkWinner():
         return board[0][2]
     #no winner if you run out of freespaces before anyone wins, not sure if it works
     if freespaces == 0:
-        return ' '
+        return 'No one'
     #return None (old ver)
 
 def victory():
@@ -177,23 +176,6 @@ def victory():
     canvas2_toplevel.create_window((400, 150))
 
     canvas2_toplevel.create_text(20, 80, text = f"{winner} wins!", font=("Times New Roman", 35), fill="white", anchor="nw")
-    button = Button(canvas2_toplevel, text="Play again", font=("Times New Roman", 25), fg = "white", bg = 'gray12', activebackground='gray12', command=destruction)
-    button.pack()
-    window.mainloop()
-
-def draw():
-    global winner
-    #makes another popup window, makes it toplevel and puts a canvas on it so i can place buttons
-    canvas2 = Canvas(window, width=400, height=150)
-    canvas2.pack()
-    toplevel = Toplevel(window)
-    toplevel.geometry('400x150+400+400') #window of 400x100, at (400,400)
-    toplevel.config(bg='gray12')
-    canvas2_toplevel = Canvas(toplevel, width=400, height=150, bg='gray12')
-    canvas2_toplevel.pack(fill=BOTH, expand=True)
-    canvas2_toplevel.create_window((400, 150))
-
-    canvas2_toplevel.create_text(20, 80, text = "It's a draw!", font=("Times New Roman", 35), fill="white", anchor="nw")
     button = Button(canvas2_toplevel, text="Play again", font=("Times New Roman", 25), fg = "white", bg = 'gray12', activebackground='gray12', command=destruction)
     button.pack()
     window.mainloop()
@@ -232,47 +214,75 @@ def get_win_counts():
     conn.close()
     print(win_counts)
 
-def best_move():
-    global move, bestScore
-    bestScore = -math.inf
-    move = [0,0]
-    for i in range(0,3):
-        for j in range(0,3):
-            if board[i][j] == ' ':
-                board[i][j] = 'O' # make a move for the AI
-                score = minimax(board,0,False) # calculate score
-                board[i][j] = ' ' # undo the move
-                if score > bestScore:
-                    bestScore = score
-                    move = [i, j]
-    return move 
+def best_move(board, player):
+    best_score = float('-inf')
+    move = None
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] == ' ':
+                board[row][col] = 'O'
+                score = minimax(board, 0, False)
+                board[row][col] = ' '
+                score = max(score, best_score)
+                move =[row, col]
 
-def minimax(board, depth, isMaximising):
-    result = checkWinner()
-    if result:
-        return scores[result]
-    
-    if isMaximising:
-        bestScore = -math.inf       
-        for i in range(0,3):
-            for j in range(0,3):
-                if board[i][j] == ' ':
-                    board[i][j] = 'O' # make a move for the AI
-                    score = minimax(board, depth +1, False) # calculate score
-                    board[i][j] = ' ' # undo the move
-                    bestScore = max(score, bestScore)
-        return bestScore
-    else:
-        bestScore = math.inf
-        for i in range(0,3):
-            for j in range(0,3):
-                if board[i][j] == ' ':
-                    board[i][j] = 'X' # make a move for the human player
-                    score = minimax(board, depth +1, True) # calculate score
-                    board[i][j] = ' ' # undo the move
-                    bestScore = min(score, bestScore)
-        return bestScore     
-            
+    print("best move is: ", move)
+    row_ = move[0]-1
+    col_ = move[1]-1
+    board[row_][col_] = 'O'
+    print(board)
+        
+    return move
+
+
+def minimax(board, depth, is_maximizing):
+        best_score = float('-inf') if is_maximizing else float('inf')
+        winner = checkWinner(board)
+        print(winner)
+        if winner == "X":
+            #print("-1")
+            return -1
+        if winner == "O":
+            #print("1")
+            return 1
+        if winner == "No one":
+            return 0
+        if winner == None:
+
+            if is_maximizing:
+                for row in range(3):
+                    for col in range(3):
+                        #print(row,col)
+                        if board[row][col] == ' ':
+                            board[row][col] = 'O'
+                            #print(board)
+                            score = minimax(board, depth+1, False)
+                            #print(score)
+                            board[row][col] = ' '
+                            #print(board)
+                            score = min(score, best_score)
+                            #print(score)
+                            move = [row, col]
+                                
+                return best_score
+
+            else:
+                for row in range(3):
+                    for col in range(3):
+                        #print(row,col)
+                        if board[row][col] == ' ':
+                        #    print(board)
+                            board[row][col] = 'X'
+                         #   print(board)
+                            score = minimax(board, depth+1, True)
+                          #  print(score)
+                            board[row][col] = ' '
+                           # print(board)
+                            best_score = min(best_score, score)
+                            
+                return best_score
+
+
 def play():
     #create_table()
     boardinit()

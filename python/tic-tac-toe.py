@@ -1,160 +1,176 @@
-from tkinter import *
+import math
+import time
 import random
 
-window = Tk()
-window.title("Tic Tac Toe")
-window.geometry("950x850")
-window['bg'] = 'gray12'
-canvas = Canvas(window, width = 950, height = 850, bg = 'gray12')
-canvas.pack()
 
-winner = ' '
-a = 100
-b = 350
-c = 600
-x2 = None
-y2 = None
-freespaces = 9
-board = [[' ' for j in range(3)] for i in range(3)]
+class Player():  #just defines the letter, to act as the parent for basically all the other classes
+    def __init__(self, letter):
+        self.letter = letter 
 
-def idk_grid():
-    for i in range(0,3):
-        for j in range(0,3):
-            board[i][j] = ' '
-            
-def check_space():
-    for i in range(0,3):
-        for j in range(0,3):
-            if board[i][j] != ' ':
-                freespaces = freespaces - 1
-    
-  
-
-def button_clicked(event):
-    global x2, y2
-    button = event.widget
-    button_name = button.winfo_name()
-    button_num = button_name.replace("button", "")
-    print("Square {} clicked".format(button_num))
-
-    button = canvas.nametowidget(button_name)
-    x1 = button.winfo_x()
-    y1 = button.winfo_y()
-    print(x1, y1)
-    button.destroy()
-    
-    img = PhotoImage(file = r"C:\Users\devan\OneDrive\Documents\code\python\graphics\X.png")
-    label = Label(canvas, image=img)
-    label.image = img
-    label.place(x = x1,y = y1-15)
-    
-    movedict = {'1' : [0,1], '2': [0,1], '3': [0,2], '4' : [1,0], '5' : [1,1], '6': [1,2], '7' : [2,0], '8': [2,1], '9': [2,2]}
-    
-    x2 = movedict[button_num][0]
-    y2 = movedict[button_num][1]
-    print("test", x2, y2)
-    return x2, y2
-
-def player_move(x2, y2):
-    global board
-    if x2 is None or y2 is None:
+    def get_move(self, game):
         pass
-    if board[x2][y2] != ' ':
-        print("Invalid move")
-    else:
-        board[x2][y2] = 'X'
 
-def computer_move():
-    if freespaces > 0:
-        x3 = random.randint(0,2)
-        y3 = random.randint(0,2)
-        board[x3][y3] = 'O'
-        while board[x3][y3] != ' ':
-            x3 = random.randint(0,2)
-            y3 = random.randint(0,2)
-            board[x3][y3] = 'O'
-    else:
-        print_winner(' ')
+class HumanPlayer(Player):  #inherits from player
+    def __init__(self, letter):
+        super().__init__(letter)   #using the same letter as in parent
 
-def check_winner():
-    for i in range(0,3):
-        if board[i][0] == board [i][1] and board [i][0] == board [i][2]:
-            return board[i][0]
-        
-    for i in range(0,3):
-        if board[0][i]== board[1][i] and board[0][i] == board[2][i]:
-            return board[0][i]
+    def get_move(self, game):
+        valid_square = False
+        val = None
+        while not valid_square:
+            square = input(self.letter + '\'s turn. Input move (0-9): ')
+            try:
+                val = int(square)
+                if val not in game.available_moves():
+                    raise ValueError
+                valid_square = True
+            except ValueError:
+                print('Invalid square. Try again.')
+        return val
+
+class RandomComputerPlayer(Player):   #basically useless
+    def __init__(self, letter):
+        super().__init__(letter)
+
+    def get_move(self, game):
+        square = random.choice(game.available_moves())
+        return square
+
+class SmartComputerPlayer(Player):
+    def __init__(self, letter):
+        super().__init__(letter)   #again, inheriting from parent player
+
+    def get_move(self, game):
+        if len(game.available_moves()) == 9:
+            square = random.choice(game.available_moves())
+        else:
+            square = self.minimax(game, self.letter)['position']
+        return square
+
+    def minimax(self, state, player):
+        max_player = self.letter  # yourself
+        other_player = 'O' if player == 'X' else 'X'
+
+        # first we want to check if the previous move is a winner
+        if state.current_winner == other_player:
+            return {'position': None, 'score': 1 * (state.num_empty_squares() + 1) if other_player == max_player else -1 * (
+                        state.num_empty_squares() + 1)}
+        elif not state.empty_squares():
+            return {'position': None, 'score': 0}
+
+        if player == max_player:
+            best = {'position': None, 'score': -math.inf}  # each score should maximize
+        else:
+            best = {'position': None, 'score': math.inf}  # each score should minimize
+        for possible_move in state.available_moves():
+            state.make_move(possible_move, player)
+            sim_score = self.minimax(state, other_player)  # simulate a game after making that move
+
+            # undo move
+            state.board[possible_move] = ' '
+            state.current_winner = None
+            sim_score['position'] = possible_move  # this represents the move optimal next move
+
+            if player == max_player:  # X is max player
+                if sim_score['score'] > best['score']:
+                    best = sim_score
+            else:
+                if sim_score['score'] < best['score']:
+                    best = sim_score
+        return best
+class TicTacToe():
+    def __init__(self):
+        self.board = self.make_board()
+        self.current_winner = None
+
+    @staticmethod
+    def make_board():
+        return [' ' for _ in range(9)]
+
+    def print_board(self):
+        for row in [self.board[i*3:(i+1) * 3] for i in range(3)]:
+            print('| ' + ' | '.join(row) + ' |')
+
+    @staticmethod
+    def print_board_nums():
+        # 0 | 1 | 2
+        number_board = [[str(i) for i in range(j*3, (j+1)*3)] for j in range(3)]
+        for row in number_board:
+            print('| ' + ' | '.join(row) + ' |')
+
+    def make_move(self, square, letter):
+        if self.board[square] == ' ':
+            self.board[square] = letter
+            if self.winner(square, letter):
+                self.current_winner = letter
+            return True
+        return False
+
+    def winner(self, square, letter):
+        # check the row
+        row_ind = math.floor(square / 3)
+        row = self.board[row_ind*3:(row_ind+1)*3]
+        # print('row', row)
+        if all([s == letter for s in row]):
+            return True
+        col_ind = square % 3
+        column = [self.board[col_ind+i*3] for i in range(3)]
+        # print('col', column)
+        if all([s == letter for s in column]):
+            return True
+        if square % 2 == 0:
+            diagonal1 = [self.board[i] for i in [0, 4, 8]]
+            # print('diag1', diagonal1)
+            if all([s == letter for s in diagonal1]):
+                return True
+            diagonal2 = [self.board[i] for i in [2, 4, 6]]
+            # print('diag2', diagonal2)
+            if all([s == letter for s in diagonal2]):
+                return True
+        return False
+
+    def empty_squares(self):
+        return ' ' in self.board
+
+    def num_empty_squares(self):
+        return self.board.count(' ')
+
+    def available_moves(self):
+        return [i for i, x in enumerate(self.board) if x == " "]
     
-    if board[0][0]==board[1][1] and board [0][0] == board[2][2]:
-        return board[0][0]
-    if board[0][2]== board[1][1] and board [0][2] == board [2][0]:
-        return board[0][2]
+def play(game, x_player, o_player, print_game=True):
+
+    if print_game:
+        game.print_board_nums()
+
+    letter = 'X'
+    while game.empty_squares():
+        if letter == 'O':
+            square = o_player.get_move(game)
+        else:
+            square = x_player.get_move(game)
+        if game.make_move(square, letter):
+
+            if print_game:
+                print(letter + ' makes a move to square {}'.format(square))
+                game.print_board()
+                print('')
+
+            if game.current_winner:
+                if print_game:
+                    print(letter + ' wins!')
+                return letter  # ends the loop and exits the game
+            letter = 'O' if letter == 'X' else 'X'  # switches player
+
+        time.sleep(.8)
+
+    if print_game:
+        print('It\'s a tie!')
+
+
+if __name__ == '__main__':
+    x_player = SmartComputerPlayer('X')
+    o_player = HumanPlayer('O')
+    t = TicTacToe()
+    play(t, x_player, o_player, print_game=True)
     
-def print_winner(winner):
-    if winner == 'X':
-        print("You won!")
-    if winner == 'O':
-        print("You lost!")
-    if winner == ' ':
-        print("Its a tie")
-
-line1 = canvas.create_line(a,325,850,325, width = 7, fill = 'white')
-line2 = canvas.create_line(a,575,850,575, width = 7, fill = 'white')
-line3 = canvas.create_line(b,75,b,825, width = 7, fill = 'white')
-line4 = canvas.create_line(c,75,c,825, width = 7, fill = 'white')
-
-#all the buttons(not monke)
-
-button1 = Button(canvas, text = ' ', name = 'button1', bd = 0, bg = 'gray12',activebackground= 'gray12', height = 14, width = 33)
-button1.place(x = a,y =a)
-button1.bind("<Button-1>", button_clicked)
-
-button2 = Button(canvas, text = ' ', bd = 0, name = 'button2', bg = 'gray12',activebackground= 'gray12', height = 14, width = 33)
-button2.place(x = b +10,y =a)
-button2.bind("<Button-1>", button_clicked)
-
-button3 = Button(canvas, text = ' ', bd = 0,name = 'button3', bg = 'gray12',activebackground= 'gray12', height = 14, width = 33)
-button3.place(x = c + 10,y =a)
-button3.bind("<Button-1>", button_clicked)
-
-button4 = Button(canvas, text = ' ', bd = 0,name = 'button4', bg = 'gray12',activebackground= 'gray12', height = 14, width = 33)
-button4.place(x = a,y =b)
-button4.bind("<Button-1>", button_clicked)
-
-button5 = Button(canvas, text = ' ', bd = 0, name = 'button5', bg = 'gray12',activebackground= 'gray12', height = 14, width = 33)
-button5.place(x = b+10,y =b)
-button5.bind("<Button-1>", button_clicked)
-
-button6 = Button(canvas, text = ' ', bd = 0,name = 'button6', bg = 'gray12',activebackground= 'gray12', height = 14, width = 33)
-button6.place(x = c+10,y =b)
-button6.bind("<Button-1>", button_clicked)
-
-button7 = Button(canvas, text = ' ', bd = 0, name = 'button7', bg = 'gray12',activebackground= 'gray12', height = 14, width = 33)
-button7.place(x = a,y = c)
-button7.bind("<Button-1>", button_clicked)
-
-button8 = Button(canvas, text = ' ', bd = 0, name = 'button8', bg = 'gray12',activebackground= 'gray12', height = 14, width = 33)
-button8.place(x = b+10,y =c)
-button8.bind("<Button-1>", button_clicked)
-
-button9 = Button(canvas, text = ' ', bd = 0, name = 'button9', bg = 'gray12',activebackground= 'gray12', height = 14, width = 33)
-button9.place(x = c+10,y =c)
-button9.bind("<Button-1>", button_clicked)
-
-
-idk_grid()
-
-while winner == ' ' and freespaces != 0:
-    player_move(x2, y2)
-    winner = check_winner()
-    if winner != ' ' or freespaces == 0:
-        break
-    
-    computer_move()
-    winner = check_winner()
-    if winner != ' ' or freespaces == 0:
-        break
-    
-print_winner(winner)
-
-window.mainloop()
