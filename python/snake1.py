@@ -1,3 +1,6 @@
+from pytimedinput import timedInput
+import os
+
 def print_field():
     for cell in CELLS:
         if cell in snake_body:
@@ -12,7 +15,10 @@ def print_field():
             print('')
 
 def update_snake():
-    pass
+    new_head = snake_body[0][0] + direction[0], snake_body[0][1] + direction[1]
+    snake_body.insert(0, new_head)
+    snake_body.pop(-1)
+    
 FIELD_WIDTH =  32
 FIELD_HEIGHT = 16
 CELLS = [(col, row) for row in range(FIELD_HEIGHT) for col in range(FIELD_WIDTH)]
@@ -25,6 +31,11 @@ direction = DIRECTIONS['right']
 #apple
 apple_pos = (5, 10)
 
-
-
-print_field()
+while True:
+    os.system('cls')
+    
+    print_field()
+    
+    txt,_ = timedInput('get input:', timeout=0.3)
+    
+    update_snake()

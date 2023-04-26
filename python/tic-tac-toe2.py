@@ -128,7 +128,7 @@ def computerMove():
         print("Computer chooses square", button_num)
         x1 = button.winfo_x()
         y1 = button.winfo_y()
-        button.destroy()
+        button.destroy() 
         
         img = PhotoImage(file=r"C:\Users\devan\OneDrive\Documents\code\python\graphics\O.png")
         label = Label(canvas, image=img)
@@ -137,9 +137,6 @@ def computerMove():
         print(board)
         
         freespaces -= 1
-        
-        
-        
         
     else:
         winner = ' '
