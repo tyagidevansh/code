@@ -1,0 +1,6 @@
+from datetime import date
+
+date = date.today()
+print(date)
+date_str = str(date)
+print(date_str)
