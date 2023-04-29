@@ -1,30 +1,19 @@
-def print_field():
-    for cell in CELLS:
-        if cell in snake_body:
-            print("X", end = '')
-        if cell[0] in (0, FIELD_WIDTH-1) or cell[1] in (0, FIELD_HEIGHT-1):
-            print("#", end = "") 
-        elif cell == apple_pos:
-            print('a', end='')
-        else:
-            print(' ', end = "")
-        if cell[0] == FIELD_WIDTH-1:
-            print('')
+import datetime
 
-def update_snake():
-    pass
-FIELD_WIDTH =  32
-FIELD_HEIGHT = 16
-CELLS = [(col, row) for row in range(FIELD_HEIGHT) for col in range(FIELD_WIDTH)]
+# Get the current day
+cur_day = datetime.datetime.today().date()
 
-#snake
-snake_body = [(5,FIELD_HEIGHT//2),(4,FIELD_HEIGHT//2),(3,FIELD_HEIGHT//2)]
-DIRECTIONS = {'left' : (-1,0), 'right': (1,0), 'up': (0,-1), 'down' : (0,1)}
-direction = DIRECTIONS['right']
+# Get the day name for the current day
+day_name = cur_day.strftime("%A")
 
-#apple
-apple_pos = (5, 10)
+# Create a list to store the last 6 days
+last_6_days = []
 
+# Loop through the last 6 days and append them to the list
+for i in range(6, 0, -1):
+    delta = datetime.timedelta(days=i)
+    day = cur_day - delta
+    last_6_days.append(day.strftime("%A"))
 
-
-print_field()
+# Print the last 6 days
+print(last_6_days)

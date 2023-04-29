@@ -5,12 +5,15 @@
 from discord.ext import commands, tasks
 import discord
 from dataclasses import dataclass
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 import requests
 import json
 import sqlite3
+import matplotlib.pyplot as plt
+import pandas as pd
+import io
 
-TOKEN = ''#unique bot token
+TOKEN = 'MTEwMDQ4MjUzMjE3ODM5OTMwMg.Gc_pYZ.WM8kDEkOyj_gD61ZNtp1JnAlYuKkkPDyWoE3fE'#unique bot token
 CHANNEL_ID = 1100633700636557382 #the channel to which the initial bot online message will be sent
 
 
@@ -53,7 +56,7 @@ def time_in_min(time_delta): #calculates time for the storing in database
     total_seconds = time_delta.total_seconds()
 
     if total_seconds < 600:
-        return None
+        return 10
 
     elif total_seconds >= 3600:
         time = int(total_seconds // 60)
@@ -244,6 +247,90 @@ async def on_command_error(ctx, error): #if it hits a command it does not know, 
         pass
     else:
         raise error
+
+# def plot_data_for_week(conn, user_id, activitytype):
+#     cursor = conn.cursor()
+#     cur_day = datetime.today().date()
+#     week_ago = cur_day - timedelta(days=7)
+#     cursor.execute("SELECT day, SUM(minutes) FROM productive_time WHERE user_id = ? AND activity=? AND day BETWEEN ? and ? GROUP BY day", (user_id, activitytype,week_ago, cur_day))
+#     rows = cursor.fetchall()
+#     days = [week_ago + timedelta(days=i) for i in range(7)]
+#     minutes = []
+#     day_name = cur_day.strftime("%A")
+#     day_names = []
+#     for i in range(0,7):
+#         delta = timedelta(days=i)
+#         day = cur_day - delta
+#         day_names.append(day.strftime("%A"))
+#     for day in days:
+#         found = False
+#         for row in rows:
+#             if row[0] == day:
+#                 minutes.append(row[1])
+#                 found = True
+#                 break
+#         if not found:
+#             minutes.append(0)
+#     return days, minutes, day_names
+
+
+def plot_data_for_week(conn, user_id, activitytype):
+    cursor = conn.cursor()
+    cur_day = datetime.today().date()
+    week_ago = cur_day - timedelta(days=7)
+    print(week_ago)
+    cursor.execute("SELECT day, SUM(minutes) FROM productive_time WHERE user_id = ? AND activity=? AND day BETWEEN ? and ? GROUP BY day", (user_id, activitytype, week_ago, cur_day))
+
+    rows = cursor.fetchall()
+    days = [row[0] for row in rows]
+    print(days)
+    minutes = [row[1] for row in rows]
+    print(minutes)
+    # Convert days to datetime objects
+    days = [datetime.strptime(day, '%Y-%m-%d').date() for day in days]
     
+    # Get all the days between the week ago date and current date
+    all_days = [week_ago + timedelta(days=i) for i in range(7)]
+    day_names = [day.strftime("%A") for day in all_days]
+    print(day_names)
+    
+    # Create a dictionary to map each day to its corresponding minute value
+    day_minutes = dict(zip(days, minutes))
+    # Create a list of minute values for each day, in the order of the all_days list
+    minute_values = [day_minutes.get(day, 0) for day in all_days]
+
+    return all_days, minute_values, day_names
+
+@bot.command()
+async def graph(ctx):
+    activitytype = "Study"
+    days, minutes, day_names = plot_data_for_week(conn, ctx.author.id, activitytype)
+    # Create the bar graph
+    fig, ax = plt.subplots()
+    ax.bar(days, minutes)
+    ax.set_xticklabels(day_names, rotation=45, ha='right')
+    ax.set_xlabel('Day')
+    ax.set_ylabel('Minutes')
+    ax.set_title(f"Time spent {activitytype.lower()}ing in the last 7 days")
+    plt.tight_layout()
+
+    # Convert the plot to an image buffer
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+
+    # Create and send the embed with the image
+    file = discord.File(buf, filename='plot.png')
+    embed = discord.Embed(title=f"Time spent studying in the last 7 days", color=0x00ff00)
+    embed.set_image(url='attachment://plot.png')
+    await ctx.send(embed=embed, file=file)
+
+
+
+@bot.command()
+async def totalall(ctx):
+    activitytype = "Studying"
+    study_data = get_data(conn, ctx.author.id,activitytype)
+    await ctx.send(study_data)
 
 bot.run(TOKEN)
