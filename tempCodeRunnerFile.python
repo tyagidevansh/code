@@ -1,19 +1,6 @@
 import datetime
+import calendar
 
-# Get the current day
-cur_day = datetime.datetime.today().date()
-
-# Get the day name for the current day
-day_name = cur_day.strftime("%A")
-
-# Create a list to store the last 6 days
-last_6_days = []
-
-# Loop through the last 6 days and append them to the list
-for i in range(6, 0, -1):
-    delta = datetime.timedelta(days=i)
-    day = cur_day - delta
-    last_6_days.append(day.strftime("%A"))
-
-# Print the last 6 days
-print(last_6_days)
+now = datetime.datetime.now()
+num_days = calendar.monthrange(now.year, now.month)[1]
+print(num_days) # prints the number of days in the current month

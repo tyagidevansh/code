@@ -1,0 +1,24 @@
+Hi! I am loge.it, you can call me e. I am here to help you be more productive.
+
+This bot is far from complete, most things are unpolished but the basic functions should work fine. 
+
+STARTING OR ENDING SESSIONS
+Start or ss: Start a new study session
+End or es: End an ongoing study session
+Startworkout or sw : Start a new workout session
+Endworkoutsession or ew: End an ongoing workout session
+
+VIEW TOTALS 
+Total or ts: Total time spent studying today
+Totalstudyduration or td or tsd: Total time spent studying in a week, month or year
+Totalworkout or tw: Total time spent working out today
+Totalworkoutduration or twd: Total time spent working out in a week, month or year
+
+VISUALISE TOTALS
+Graph or g: Graph for time spent studying in the last week
+Graphmonth or gm: Graph for time spent studying in the last month
+Graphworkout or gw: Graph for time spent working out in the last week
+Graphworkoutmonth or gwm: Graph for time spent working out in the last month
+
+RANDOM
+Quote : Just a quote
