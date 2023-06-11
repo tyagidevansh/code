@@ -1,0 +1,26 @@
+body{
+    background-color: rgb(28, 26, 26);
+}
+h2{
+    color:white;
+}
+p{
+    background-color: gray;
+    color: white;
+}
+
+#grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Adjust the number of columns as needed */
+    gap: 10px; /* Adjust the gap size between grid items as needed */
+    justify-content: center;
+    align-items: center;
+    max-width: 400px; /* Set a maximum width for the grid if desired */
+    margin: auto;
+  }
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  

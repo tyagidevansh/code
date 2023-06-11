@@ -14,7 +14,7 @@ import io
 from discord.ext import commands
 import calendar
 
-TOKEN = ''#unique bot token
+TOKEN = 'MTEwMDQ4MjUzMjE3ODM5OTMwMg.GvVLf_.0_xVmyzahXaitJ1WYFvlbLewoW9UjYA2DcdHoU'#unique bot token
 CHANNEL_ID = 1100633700636557382 #the channel to which the initial bot online message will be sent
 
 def create_connection(): 
