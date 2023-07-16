@@ -6,9 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Memory game</title>
     <link rel = "Stylesheet" href="style.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h3> Score: <span id="result"> </span> </h3>
+    <div class="score-container">
+        <h3>Score:<span id="result"></span></h3>
+      </div>
+      
 
     <div id = "grid" class = "centered"></div>
 
@@ -16,3 +20,10 @@
     <script src="memorygame.js" charset="utf-8"></script>
 </body>
 </html>
+
+<!-- to do:
+1. make the background extend
+2. make the destroyed tiles either transparent or have something else other than white there
+3. add card flip animations
+4. add a database in the back to store how quickkly you did it
+5. add a second level-->

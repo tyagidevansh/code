@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Get Outdoors</title>
+  <link rel="stylesheet" type="text/css" href="queststyle.css">
+</head>
+<body>
+  <header>
+    <h1>Welcome to Get Outdoors</h1>
+  </header>
+  
+  <nav>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">Locations</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </nav>
+  
+  <main>
+    <section>
+        <h2>Upcoming Events</h2>
+        <div id="event-list">
+          <!-- Event listings will be dynamically added here -->
+        </div>
+      
+        <h2>Add New Event</h2>
+        <form id="event-form">
+          <input type="text" id="title-input" placeholder="Event Title" required>
+          <input type="text" id="date-input" placeholder="Event Date" required>
+          <input type="text" id="location-input" placeholder="Event Location" required>
+          <textarea id="description-input" placeholder="Event Description" required></textarea>
+          <button type="button" onclick="addEvent()">Add Event</button>
+        </form>
+    </section>
+  </main>
+  
+  <footer>
+    <p>&copy; 2023 Get Outdoors. All rights reserved.</p>
+  </footer>
+  
+  <script src="script.js"></script>
+</body>
+</html>
