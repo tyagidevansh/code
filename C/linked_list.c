@@ -61,3 +61,14 @@ Node* insert_beg(Node *head, int data) {
     head = new;
     return head;
 }
+
+Node* insert_end(Node* head, int data){
+    Node *new;
+
+    new = (Node*)malloc(sizeof(Node));
+
+    if (new == NULL){
+        printf("Memory allocation failed");
+        return head;
+    }
+}

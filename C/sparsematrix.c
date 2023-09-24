@@ -2,22 +2,15 @@
 #include <stdlib.h>
 
 int row, col;
-
-// Defining a new datatype (called Element) of type struct Element*
 typedef struct Element {
-    int x;
-    int y;
-    int value;
+    int x, y, value;
 } *Element;
 
 typedef struct SparseMatrix {
-    int row;
-    int col;
-    int num;
+    int row, col, num;
     Element elements;
 } *SparseMatrix;
 
-// All the function prototypes
 void input_matrix(int matrix[row][col], int *num);
 SparseMatrix createSparseMatrix(int matrix[row][col], int num);
 void printSparseMatrix(SparseMatrix sparseMatrix);
@@ -25,21 +18,18 @@ void printSparseMatrix(SparseMatrix sparseMatrix);
 int main(void) {
     printf("Enter the number of rows and columns: \n");
     scanf("%d %d", &row, &col);
-
     int matrix[row][col];
 
     int num;
     input_matrix(matrix, &num);
 
     SparseMatrix sparseMatrix = createSparseMatrix(matrix, num);
-
     printSparseMatrix(sparseMatrix);
 
-    free(sparseMatrix->elements); // Free dynamically allocated memory
-    free(sparseMatrix); // Free sparseMatrix itself
+    free(sparseMatrix->elements);
+    free(sparseMatrix); 
 
-    return 0;
-}
+    return 0;}
 
 void input_matrix(int matrix[row][col], int *num) {
     int count = 0;
@@ -78,14 +68,14 @@ SparseMatrix createSparseMatrix(int matrix[row][col], int num) {
             }
         }
     }
-    return sparseMatrix;
-}
+    return sparseMatrix;}
 
 void printSparseMatrix(SparseMatrix sparseMatrix) {
     int index = 0;
     for (int i = 0; i < sparseMatrix->row; i++) {
         for (int j = 0; j < sparseMatrix->col; j++) {
-            if ((sparseMatrix->elements[index].x == i) && (sparseMatrix->elements[index].y == j)) {
+            if ((sparseMatrix->elements[index].x == i) 
+            && (sparseMatrix->elements[index].y == j)) {
                 printf("%d ", sparseMatrix->elements[index].value);
                 index++;
             } else {
@@ -93,8 +83,7 @@ void printSparseMatrix(SparseMatrix sparseMatrix) {
             }
         }
         printf("\n");
-    }
-}
+    }}
 
 
 
