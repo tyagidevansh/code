@@ -1,20 +1,66 @@
-#include "linked_list.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
-int main(){
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
 
+Node* insert_end(Node* head, int data) {
+    Node* new = (Node*)malloc(sizeof(Node));
+
+    if (new == NULL) {
+        printf("Memory allocation failed");
+        return head;
+    }
+
+    new->data = data;
+    new->next = NULL;
+
+    if (head == NULL) {
+        head = new;
+    } else {
+        Node* ptr = head;
+        while (ptr->next != NULL) {
+            ptr = ptr->next;
+        }
+        ptr->next = new;
+    }
+
+    return head;
+}
+
+void print_list(Node* head) {
+    Node* current = head;
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+Node* insert(Node* head) {
+    int data;
+    bool isValid = true;
+
+    while (isValid) {
+        printf("Enter an element: ");
+        isValid = (scanf("%d", &data) == 1);
+
+        if (isValid) {
+            head = insert_end(head, data);
+        }
+        else return head;
+    }
+    return head;
+}
+
+int main() {
     Node* head = NULL;
 
-    head = insert_intial(head);
-    head = insert_beg(head, 5);
-    head = insert_end(head, -1);
-    head = insert_between(head, 4, 4);
-    head = delete_beg(head);
-    //head = delete_end(head);
-    //head = delete_val(head, 0);
-    head = delete_pos(head, 3);
-    //head = reverse_iter(head);
-    head = reverse_recur(head);
+    head = insert(head);
+
     print_list(head);
 
     return 0;

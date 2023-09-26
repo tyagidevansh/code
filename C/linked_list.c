@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct Node{
     int data;
@@ -17,25 +18,6 @@ Node* delete_val(Node* head, int x);
 Node* delete_pos(Node* head, int pos);
 Node* reverse_iter(Node* head);
 Node* reverse_recur(Node* head);
-
-// int main(){
-
-//     Node* head = NULL;
-
-//     head = insert_intial(head);
-//     head = insert_beg(head, 5);
-//     head = insert_end(head, -1);
-//     head = insert_between(head, 4, 4);
-//     head = delete_beg(head);
-//     //head = delete_end(head);
-//     //head = delete_val(head, 0);
-//     head = delete_pos(head, 3);
-//     //head = reverse_iter(head);
-//     head = reverse_recur(head);
-//     print_list(head);
-
-//     return 0;
-// }
 
 void print_list(Node* head){
     Node* current = head;
