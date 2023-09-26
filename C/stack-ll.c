@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typdedef struct Node{
+typedef struct Node{
     int data;
     struct Node* next;
 }Node;
@@ -17,7 +17,7 @@ Node* createNode(int data){
 
     if(newNode == NULL){
         printf("Memory allocation failed");
-        return 1;
+        exit(1);
     }
 
     newNode -> data = data;
@@ -31,7 +31,7 @@ Stack* intializeStack(){
 
     if (stack == NULL){
         printf("Memory allocation failed");
-        return 1;
+        exit(1);
     }
 
     stack -> top = NULL;
@@ -43,17 +43,55 @@ void push(Stack* stack, int data){
     newNode = (Node*)malloc(sizeof(Stack));
 
     newNode -> next = stack->top;
+    newNode -> data = data;
     stack -> top = newNode;
 }
 
-void pop(Stack* stack){
+int pop(Stack* stack){
     if (stack -> top == NULL){
         printf("The stack is empty! No elements can be popped. ");
-        return 1;
+        exit(1);
     }
 
     Node* topNode = stack -> top;
+    int data = topNode -> data;
     stack -> top = topNode -> next;
     free(topNode);
     return data;
+}
+
+int peek(Stack* stack){
+    if (stack -> top == NULL){
+        printf("The stack is empty");
+    }
+    return stack->top->data;
+}
+
+bool isEmpty(Stack* stack){
+    return (stack->top == NULL);
+}
+
+void freeStack(Stack* stack){
+    while(!isEmpty(stack)){
+        pop(stack);
+    }
+    free(stack);
+}
+
+int main(){
+    Stack* stack = intializeStack();
+
+    push(stack, 5);
+    push(stack, 10);
+    push(stack, 20);
+
+    printf("First element in the stack: %d \n", peek(stack));
+
+    while(!isEmpty(stack)){
+        printf("Element popped: %d \n", pop(stack));
+    }
+
+    freeStack(stack);
+
+    return 0;
 }
