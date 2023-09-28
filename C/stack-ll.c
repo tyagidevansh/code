@@ -11,20 +11,6 @@ typedef struct Stack{
     Node* top;
 }Stack;
 
-Node* createNode(int data){
-    Node* newNode;
-    newNode = (Node*)malloc(sizeof(Node));
-
-    if(newNode == NULL){
-        printf("Memory allocation failed");
-        exit(1);
-    }
-
-    newNode -> data = data;
-    newNode -> next = NULL;
-    return newNode;
-}
-
 Stack* intializeStack(){
     Stack* stack;
     stack = (Stack*)malloc(sizeof(Stack));
@@ -67,6 +53,26 @@ int peek(Stack* stack){
     return stack->top->data;
 }
 
+Stack* reverse(Stack* stack){
+    Stack* stack2;
+    stack2 = (Stack*)malloc(sizeof(stack));
+
+    if (stack2 == NULL){
+        printf("Stack reversal failed due to memory allocation error");
+        exit(1);
+    }
+
+    stack2 -> top = NULL;
+
+    Node* current = stack->top;
+
+    while (current != NULL){
+        push(stack2, current->data);
+        current = current->next;
+    }
+    return stack2;
+}
+
 bool isEmpty(Stack* stack){
     return (stack->top == NULL);
 }
@@ -80,12 +86,14 @@ void freeStack(Stack* stack){
 
 int main(){
     Stack* stack = intializeStack();
+    Stack* stack_rev;
 
     push(stack, 5);
     push(stack, 10);
     push(stack, 20);
 
-    printf("First element in the stack: %d \n", peek(stack));
+    stack_rev = reverse(stack);
+
 
     while(!isEmpty(stack)){
         printf("Element popped: %d \n", pop(stack));

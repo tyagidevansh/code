@@ -1,22 +1,22 @@
 #include <stdio.h>
 #include <math.h>
 
-#define EPSILON 1e-6  // Tolerance for stopping the iteration
+#define EPSILON 1e-6 
 
-// Function to calculate the value of the equation
+
 double func(double x) {
     return x * x * x - 5 * x + 1;
 }
 
 // Derivative of the equation
-double derivative(double x) {
-    return 3 * x * x - 5;
+double derivative(double x, double h) {
+    return (func(x + h) - func(x)) / (h);
 }
 
-// Newton-Raphson method to find the root
 double newtonRaphson(double x0) {
     int maxIterations = 1000;
     int iter = 0;
+    double h = 0.0001;
         
     double x = x0;
 
@@ -29,7 +29,7 @@ double newtonRaphson(double x0) {
             return x;
         }
 
-        x = x - fx / derivative(x);
+        x = x - fx / derivative(x,h);
         
         iter++;
     } while (iter < maxIterations);
@@ -39,7 +39,8 @@ double newtonRaphson(double x0) {
 }
 
 int main() {
-    double x0 = 1.0; // Initial guess
+    double x0 = 1.0; 
+ 
 
     printf("Solving the equation x^3 - 5x + 1 = 0 using Newton-Raphson method:\n");
     printf("Iteration\t x\t\t f(x)\n");

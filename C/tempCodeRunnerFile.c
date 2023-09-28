@@ -1,67 +1,55 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
+#include <math.h>
 
-typedef struct Node {
-    int data;
-    struct Node* next;
-} Node;
-
-Node* insert_end(Node* head, int data) {
-    Node* new = (Node*)malloc(sizeof(Node));
-
-    if (new == NULL) {
-        printf("Memory allocation failed");
-        return head;
-    }
-
-    new->data = data;
-    new->next = NULL;
-
-    if (head == NULL) {
-        head = new;
-    } else {
-        Node* ptr = head;
-        while (ptr->next != NULL) {
-            ptr = ptr->next;
-        }
-        ptr->next = new;
-    }
-
-    return head;
+double f(double x) {
+    return x * x * x - 5 * x + 1;
 }
 
-void print_list(Node* head) {
-    Node* current = head;
-    while (current != NULL) {
-        printf("%d ", current->data);
-        current = current->next;
-    }
-    printf("\n");
-}
+void regula_falsi(double a, double b){
+    double c, fa, fb, fc;
 
-Node* insert(Node* head) {
-    int data;
-    bool isValid = true;
-
-    while (isValid) {
-        printf("Enter an element: ");
-        isValid = (scanf("%d", &data) == 1);
-
-        if (isValid) {
-            head = insert_end(head, data);
+    fa = f(a);
+    fb = f(b);
+    if ((fa*fb) == 0) {
+        if (fa == 0){
+            printf("Exact root found at %d", a);
         }
-        else return head;
+        if (fb == 0){
+            printf("Exact root found at %d", b);
+        }
+        
     }
-    return head;
+    else if (fa*fb > 0) {
+        printf("Root does not exist within this interval");
+    }
+    else{
+        int n = 0, iter = 10;
+        while (n < iter){
+            c = (a * f(b) - b * f(a))/(f(b) - f(a));
+            fc = f(c);
+            printf("f(c): %d", fc);
+
+            if ((fa*fc) < 0){
+                b = c;
+            }
+            if ((fb*fc) < 0){
+                a = c;
+            }
+            if (fc == 0){
+                printf("Exact root found at %d", c);
+            }
+        n++; 
+        }
+    }
+    
+    
 }
 
 int main() {
-    Node* head = NULL;
+    float a = 0;
+    float b = 1;
 
-    head = insert(head);
-
-    print_list(head);
+    regula_falsi(a,b);
 
     return 0;
 }

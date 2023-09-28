@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include <math.h>
 
-#define EPSILON 1e-6  // Tolerance for stopping the iteration
+#define EPSILON 1e-6 
 
-// Function to calculate the value of the equation
 double func(double x) {
     return x * x * x - 5 * x + 1;
 }
 
-// Regula Falsi method to find the root
 double regulaFalsi(double a, double b) {
     double c, fa, fb, fc;
     int maxIterations = 5;
@@ -42,7 +40,7 @@ double regulaFalsi(double a, double b) {
 }
 
 int main() {
-    double a = 0.0, b = 2.0; // Initial interval [a, b]
+    double a = 0.0, b = 2.0; 
 
     printf("Solving the equation x^3 - 5x + 1 = 0 using Regula Falsi method:\n");
     printf("Iteration\ta\t\tb\t\tc\t\tf(c)\n");
