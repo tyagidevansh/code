@@ -101,7 +101,8 @@ int eval(char* postfix){
             push(evaluate, c);
         }
         else{
-            //wait imma commit first
+            
+            }
         }
     }
 }
