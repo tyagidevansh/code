@@ -5,23 +5,24 @@
 #include <stdbool.h>
 #include <math.h>
 
+#define SEP ','
 #define MAX 100
 
-typedef struct{
+typedef struct {
     char data[MAX];
     int top;
 } Stack;
 
-void initialize(Stack *s){
+void initialize(Stack *s) {
     s->top = -1;
 }
 
-bool is_empty(Stack *s){
-    return s-> top == -1;
+bool is_empty(Stack *s) {
+    return s->top == -1;
 }
 
-void push(Stack *s, char c){
-    if (s->top < MAX - 1 ){
+void push(Stack *s, char c) {
+    if (s->top < MAX - 1) {
         s->data[++s->top] = c;
     } else {
         printf("Stack overflow!\n");
@@ -29,54 +30,58 @@ void push(Stack *s, char c){
     }
 }
 
-char pop(Stack *s){
-    if (!is_empty(s)){
+char pop(Stack *s) {
+    if (!is_empty(s)) {
         return s->data[s->top--];
-    }else{
+    } else {
         printf("Stack underflow!\n");
         exit(1);
     }
 }
 
-void peek(Stack *s){
-    if (!is_empty(s)){
-        printf("%d \n", s->data[s->top]);
-    }else{
-        printf("Stack underflow!");
+char peek(Stack *s) {
+    if (!is_empty(s)) {
+        return s->data[s->top];
+    } else {
+        printf("Stack underflow!\n");
+        exit(2);
     }
 }
 
-int precidence(char c){
+int precedence(char c) {
     if (c == '^') return 3;
     if (c == '*' || c == '/') return 2;
     if (c == '+' || c == '-') return 1;
     return 0;
 }
 
-void infix_to_postfix(char *infix, char *postfix){
+void infix_to_postfix(char *infix, char *postfix) {
     Stack operator_stack;
     initialize(&operator_stack);
-    int i,j = 0;
+    int i, j = 0;
 
-    for (int i = 0; infix[i] != '\0';i++){
+    for (i = 0; infix[i] != '\0'; i++) {
         char c = infix[i];
 
-        if (isalnum(c)){
-            postfix[j++] = c;
+        if (isalnum(c)) {
+            while (isalnum(c)) {
+                postfix[j++] = c;
+                c = infix[++i];
+            }
+            postfix[j++] = SEP;
         }
-        else if (c == '('){
+
+        if (c == '(') {
             push(&operator_stack, c);
-        }
-        else if (c == ')'){
-            while(!is_empty(&operator_stack) && operator_stack.data[operator_stack.top] != '('){
+        } else if (c == ')') {
+            while (!is_empty(&operator_stack) && peek(&operator_stack) != '(') {
                 postfix[j++] = pop(&operator_stack);
             }
-            if (!is_empty(&operator_stack) && operator_stack.data[operator_stack.top] == '('){
+            if (!is_empty(&operator_stack) && peek(&operator_stack) == '(') {
                 pop(&operator_stack);
             }
-        }
-        else{
-            while(!is_empty(&operator_stack) && precidence(c) <= precidence(operator_stack.data[operator_stack.top])) {
+        } else {
+            while (!is_empty(&operator_stack) && precedence(c) <= precedence(peek(&operator_stack))) {
                 postfix[j++] = pop(&operator_stack);
             }
             push(&operator_stack, c);
@@ -90,49 +95,55 @@ void infix_to_postfix(char *infix, char *postfix){
     postfix[j] = '\0';
 }
 
-int eval(char* postfix){
-    Stack* evaluate;
-    initialize(evaluate);
+int eval(char *postfix) {
+    Stack evaluate;
+    initialize(&evaluate);
 
-    int i = 0, j = 0;
+    int i = 0, op1 = 0, op2 = 0;
 
-    while (postfix[i] != '\0'){
+    while (postfix[i] != '\0') {
         char c = postfix[i];
 
         if (isdigit(c)) {
-            push(evaluate, c-'0');
-    }
-        else{
-            int op1 = pop(evaluate);
-            int op2 = pop(evaluate);
-            printf("%d %d", op1, op2);
-            switch(c){
+            int num = 0;
+            while (c != SEP) {
+                num = num * 10 + (c - '0');
+                i++;
+                c = postfix[i];
+            }
+            push(&evaluate, num);
+        } else if (c == SEP) {
+            i++;
+        } else {
+            op2 = pop(&evaluate);
+            op1 = pop(&evaluate);
+            switch (c) {
                 case '+':
-                    push(evaluate, op1+op2);
+                    push(&evaluate, op1 + op2);
                     break;
                 case '-':
-                    push(evaluate, op2-op1);
+                    push(&evaluate, op1 - op2);
                     break;
                 case '*':
-                    push(evaluate, op2*op1);
+                    push(&evaluate, op1 * op2);
                     break;
                 case '/':
-                    push(evaluate, op2/op1);
+                    push(&evaluate, op1 / op2);
                     break;
                 case '^':
-                    push(evaluate, pow(op2, op1));
+                    push(&evaluate, (int)pow(op1, op2));
                     break;
                 default:
                     printf("Invalid operation!");
                     exit(1);
             }
+            i++;
         }
-        i++;
     }
-    return pop(evaluate);
+    return pop(&evaluate);
 }
 
-int main(){
+int main() {
     char infix[100], postfix[100];
 
     printf("Enter an infix expression: ");
@@ -142,9 +153,7 @@ int main(){
 
     printf("Postfix expression: %s\n", postfix);
 
-    printf("Answer: %d", eval(postfix));
-
-
+    printf("Answer: %d\n", eval(postfix));
 
     return 0;
 }
