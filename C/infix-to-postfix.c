@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
+#include <math.h>
 
 #define MAX 100
 
@@ -10,11 +12,11 @@ typedef struct{
     int top;
 } Stack;
 
-void intialize(Stack *s){
+void initialize(Stack *s){
     s->top = -1;
 }
 
-int is_empty(Stack *s){
+bool is_empty(Stack *s){
     return s-> top == -1;
 }
 
@@ -36,15 +38,15 @@ char pop(Stack *s){
     }
 }
 
-// void peek(Stack *s){
-//     if (!is_empty(s)){
-//         printf("%d \n", s->data[s->top]);
-//     }else{
-//         printf("Stack underflow!");
-//     }
-// }
+void peek(Stack *s){
+    if (!is_empty(s)){
+        printf("%d \n", s->data[s->top]);
+    }else{
+        printf("Stack underflow!");
+    }
+}
 
-int precedence(char c){
+int precidence(char c){
     if (c == '^') return 3;
     if (c == '*' || c == '/') return 2;
     if (c == '+' || c == '-') return 1;
@@ -53,7 +55,7 @@ int precedence(char c){
 
 void infix_to_postfix(char *infix, char *postfix){
     Stack operator_stack;
-    intialize(&operator_stack);
+    initialize(&operator_stack);
     int i,j = 0;
 
     for (int i = 0; infix[i] != '\0';i++){
@@ -74,7 +76,7 @@ void infix_to_postfix(char *infix, char *postfix){
             }
         }
         else{
-            while(!is_empty(&operator_stack) && precedence(c) <= precedence(operator_stack.data[operator_stack.top])) {
+            while(!is_empty(&operator_stack) && precidence(c) <= precidence(operator_stack.data[operator_stack.top])) {
                 postfix[j++] = pop(&operator_stack);
             }
             push(&operator_stack, c);
@@ -90,21 +92,44 @@ void infix_to_postfix(char *infix, char *postfix){
 
 int eval(char* postfix){
     Stack* evaluate;
-    intialize(evaluate);
+    initialize(evaluate);
 
     int i = 0, j = 0;
 
     while (postfix[i] != '\0'){
         char c = postfix[i];
 
-        if (isalnum(c)){
-            push(evaluate, c);
-        }
+        if (isdigit(c)) {
+            push(evaluate, c-'0');
+    }
         else{
-            
+            int op1 = pop(evaluate);
+            int op2 = pop(evaluate);
+            printf("%d %d", op1, op2);
+            switch(c){
+                case '+':
+                    push(evaluate, op1+op2);
+                    break;
+                case '-':
+                    push(evaluate, op2-op1);
+                    break;
+                case '*':
+                    push(evaluate, op2*op1);
+                    break;
+                case '/':
+                    push(evaluate, op2/op1);
+                    break;
+                case '^':
+                    push(evaluate, pow(op2, op1));
+                    break;
+                default:
+                    printf("Invalid operation!");
+                    exit(1);
             }
         }
+        i++;
     }
+    return pop(evaluate);
 }
 
 int main(){
@@ -116,6 +141,10 @@ int main(){
     infix_to_postfix(infix, postfix);
 
     printf("Postfix expression: %s\n", postfix);
+
+    printf("Answer: %d", eval(postfix));
+
+
 
     return 0;
 }
