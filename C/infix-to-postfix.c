@@ -13,6 +13,7 @@ typedef struct {
     int top;
 } Stack;
 
+
 void initialize(Stack *s) {
     s->top = -1;
 }
