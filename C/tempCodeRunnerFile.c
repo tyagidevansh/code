@@ -1,75 +1,83 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
+#include <math.h>
 
 #define MAX 100
+#define SEP ','
 
-typedef struct {
-    char data[MAX];
-    int top;
-} Stack;
+int nums[MAX];
+int top = -1;
 
-void initialize(Stack *s){
-    s->top = -1;
-}
-
-int is_empty(Stack *s){
-    return s->top == -1;
-}
-
-int is_full(Stack *s){
-    return s-> top == MAX-1;
-}
-
-void push(Stack *s, int data){
-    if (is_full(s)) {
-        printf("Stack overflow!");
-        return;
+void push_(int data){
+    if (top == MAX-1){
+        printf("Stack overflow");
+        exit(1);
     }
-    s->data[++s->top] = data;
+    nums[++top] = data;
 }
 
-int pop(Stack *s){
-    if (is_empty(s)){
-        printf("Stack underflow!");
-        return 1;
+int pop_(){
+    if (top == -1){
+        printf("Stack empty");
+        exit(1);
     }
-    return s->data[s->top--];
+    return nums[top--];
 }
 
-int peek(Stack *s){
-    if (is_empty(s)){
-        printf("Stack empty!");
-        return 1;
-    }
-    return s->data[s->top];
-}
+int eval(char *postfix) {
+    int i = 0, op1 = 0, op2 = 0;
 
-void display(Stack *s){
-    if (is_empty(s)){
-        printf("Stack empty!");
-        return;
-    }
-    printf("All the stack elements: ");
-        for (int i = 0; i <= s->top;i++){
-            printf("%d ", s->data[i]);
+    
+
+    while (postfix[i] != '\0') {
+        char c = postfix[i];
+
+        if (isdigit(c)) {
+            int num = 0;
+            while (c!= SEP) {
+                num = num * 10 + (c - '0');
+                i++;
+                c = postfix[i];
+            }
+            push_(num);
         }
-        printf("\n");
+        else if (c == SEP){
+            i++;
+        }else {
+            op2 = pop_();
+            op1 = pop_();
+
+            switch (c) {
+                case '+' :
+                    push_(op1+op2);
+                    break;
+                case '-' :
+                    push_(op1-op2);
+                    break;
+                case '*' :
+                    push_(op1*op2);
+                    break;
+                case '/' :
+                    push_(op1/op2);
+                    break;
+                case '^' :
+                    push_(pow(op1, op2));
+                    break;
+                default:
+                    printf("Invalid operation!");
+                    exit(1);
+            }
+            i++; 
+        }
     }
+    return pop_();
+}
 
-int main() {
-    Stack s;
-    initialize(&s);
-
-    push(&s, 10);
-    push(&s, 20);
-    push(&s, 30);
-
-    printf("Top element: %d\n", peek(&s));
-
-    display(&s);
-
-    printf("Popped element: %d\n", pop(&s));
-    display(&s);
-
+int main(){
+    char postfix[] = {'5', ',', '5', ',', '^', '\0'};
+    printf("%d", eval(postfix));
     return 0;
 }

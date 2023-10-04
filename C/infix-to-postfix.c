@@ -8,6 +8,9 @@
 #define SEP ','
 #define MAX 100
 
+int nums[MAX];
+int top = -1;
+
 typedef struct {
     char data[MAX];
     int top;
@@ -47,6 +50,22 @@ char peek(Stack *s) {
         printf("Stack underflow!\n");
         exit(2);
     }
+}
+
+void push_(int data){
+    if (top == MAX-1){
+        printf("Stack overflow");
+        exit(1);
+    }
+    nums[++top] = data;
+}
+
+int pop_(){
+    if (top == -1){
+        printf("Stack empty");
+        exit(1);
+    }
+    return nums[top--];
 }
 
 int precedence(char c) {
@@ -97,51 +116,52 @@ void infix_to_postfix(char *infix, char *postfix) {
 }
 
 int eval(char *postfix) {
-    Stack evaluate;
-    initialize(&evaluate);
-
     int i = 0, op1 = 0, op2 = 0;
+
+    
 
     while (postfix[i] != '\0') {
         char c = postfix[i];
 
         if (isdigit(c)) {
             int num = 0;
-            while (c != SEP) {
+            while (c!= SEP) {
                 num = num * 10 + (c - '0');
                 i++;
                 c = postfix[i];
             }
-            push(&evaluate, num);
-        } else if (c == SEP) {
+            push_(num);
+        }
+        else if (c == SEP){
             i++;
-        } else {
-            op2 = pop(&evaluate);
-            op1 = pop(&evaluate);
+        }else {
+            op2 = pop_();
+            op1 = pop_();
+
             switch (c) {
-                case '+':
-                    push(&evaluate, op1 + op2);
+                case '+' :
+                    push_(op1+op2);
                     break;
-                case '-':
-                    push(&evaluate, op1 - op2);
+                case '-' :
+                    push_(op1-op2);
                     break;
-                case '*':
-                    push(&evaluate, op1 * op2);
+                case '*' :
+                    push_(op1*op2);
                     break;
-                case '/':
-                    push(&evaluate, op1 / op2);
+                case '/' :
+                    push_(op1/op2);
                     break;
-                case '^':
-                    push(&evaluate, (int)pow(op1, op2));
+                case '^' :
+                    push_(pow(op1, op2));
                     break;
                 default:
                     printf("Invalid operation!");
                     exit(1);
             }
-            i++;
+            i++; 
         }
     }
-    return pop(&evaluate);
+    return pop_();
 }
 
 int main() {
