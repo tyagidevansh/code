@@ -1,83 +1,126 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdbool.h>
 #include <math.h>
+#include <ctype.h>
 
-#define MAX 100
 #define SEP ','
+#define MAX 100
 
-int nums[MAX];
-int top = -1;
+typedef struct Node {
+    void *data;
+    struct Node *next;
+} Node;
 
-void push_(int data){
-    if (top == MAX-1){
-        printf("Stack overflow");
+typedef struct {
+    Node *top;
+} Stack;
+
+void initialize(Stack *stack) {
+    stack->top = NULL;
+}
+
+int is_empty(Stack *stack) {
+    return stack->top == NULL;
+}
+
+// Function to push data onto the stack
+void push(Stack *stack, void *data) {
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed.");
         exit(1);
     }
-    nums[++top] = data;
+    newNode->data = data;
+    newNode->next = stack->top;
+    stack->top = newNode;
 }
 
-int pop_(){
-    if (top == -1){
-        printf("Stack empty");
+// Function to pop data from the stack
+void *pop(Stack *stack) {
+    if (is_empty(stack)) {
+        printf("Stack underflow!");
         exit(1);
     }
-    return nums[top--];
+    Node *topNode = stack->top;
+    stack->top = topNode->next;
+    void *data = topNode->data;
+    free(topNode);
+    return data;
 }
 
-int eval(char *postfix) {
-    int i = 0, op1 = 0, op2 = 0;
+// Function to peek at the top of the stack
+void *peek(Stack *stack) {
+    if (is_empty(stack)) {
+        printf("Stack underflow!");
+        exit(1);
+    }
+    return stack->top->data;
+}
 
-    
+// Function to get the precedence of an operator
+int precedence(char c) {
+    if (c == '^') return 3;
+    if (c == '*' || c == '/') return 2;
+    if (c == '+' || c == '-') return 1;
+    return 0;
+}
 
-    while (postfix[i] != '\0') {
-        char c = postfix[i];
+// Function to convert infix to postfix
+void infix_to_postfix(Stack *stackOp, const char *infix, char *postfix) {
+    int i, j = 0;
 
-        if (isdigit(c)) {
-            int num = 0;
-            while (c!= SEP) {
-                num = num * 10 + (c - '0');
-                i++;
-                c = postfix[i];
+    for (i = 0; infix[i] != '\0'; i++) {
+        char c = infix[i];
+
+        // Handle operands
+        if (isalnum(c)) {
+            while (isalnum(c)) {
+                postfix[j++] = c;
+                c = infix[++i];
             }
-            push_(num);
+            postfix[j++] = SEP;
         }
-        else if (c == SEP){
-            i++;
-        }else {
-            op2 = pop_();
-            op1 = pop_();
 
-            switch (c) {
-                case '+' :
-                    push_(op1+op2);
-                    break;
-                case '-' :
-                    push_(op1-op2);
-                    break;
-                case '*' :
-                    push_(op1*op2);
-                    break;
-                case '/' :
-                    push_(op1/op2);
-                    break;
-                case '^' :
-                    push_(pow(op1, op2));
-                    break;
-                default:
-                    printf("Invalid operation!");
-                    exit(1);
+        // Handle operators and parentheses
+        if (c == '(') {
+            push(stackOp, &c);
+        } else if (c == ')') {
+            while (!is_empty(stackOp) && *((char *)peek(stackOp)) != '(') {
+                postfix[j++] = *((char *)pop(stackOp));
             }
-            i++; 
+            if (!is_empty(stackOp) && *((char *)peek(stackOp) == '(')) {
+                pop(stackOp);
+            }
+        } else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
+            while (!is_empty(stackOp) && precedence(c) <= precedence(*((char *)peek(stackOp))) && *((char *)peek(stackOp) != '(')) {
+                postfix[j++] = *((char *)pop(stackOp));
+            }
+            push(stackOp, &c);
         }
     }
-    return pop_();
+
+    // Pop any remaining operators
+    while (!is_empty(stackOp)) {
+        postfix[j++] = *((char *)pop(stackOp));
+    }
+
+    // Null-terminate the postfix expression
+    postfix[j] = '\0';
 }
 
-int main(){
-    char postfix[] = {'5', ',', '5', ',', '^', '\0'};
-    printf("%d", eval(postfix));
+int main() {
+    Stack stackOp;
+    initialize(&stackOp);
+
+    char infix[100];
+    char postfix[100];
+
+    printf("Enter an infix expression: ");
+    scanf("%s", infix);
+
+    infix_to_postfix(&stackOp, infix, postfix);
+
+    printf("Postfix expression: %s\n", postfix);
+
     return 0;
 }
