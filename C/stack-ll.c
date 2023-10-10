@@ -31,6 +31,7 @@ void push(Stack* stack, int data){
     newNode -> next = stack->top;
     newNode -> data = data;
     stack -> top = newNode;
+    printf("%d pushed onto the stack \n", data);
 }
 
 int pop(Stack* stack){
@@ -86,18 +87,15 @@ void freeStack(Stack* stack){
 
 int main(){
     Stack* stack = intializeStack();
-    Stack* stack_rev;
 
-    push(stack, 5);
-    push(stack, 10);
+    push(stack, 15);
     push(stack, 20);
+    push(stack, 25);
 
-    stack_rev = reverse(stack);
+    printf("Top element of the stack : %d \n",peek(stack));
+    printf("Element popped: %d \n", pop(stack));
+    printf("Top element of the stack : %d \n",peek(stack));
 
-
-    while(!isEmpty(stack)){
-        printf("Element popped: %d \n", pop(stack));
-    }
 
     freeStack(stack);
 

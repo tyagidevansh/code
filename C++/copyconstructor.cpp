@@ -8,27 +8,18 @@ class student{
     char name[50];
     double fee;
 public:
-    student(int, const char[], double);
-    student (const student &t);
+    student();
+    student(int rno, const char n[], double f) : rno(rno), fee(f) {
+        strcpy(name,n);
+    }
+    student(const student &t) : rno(t.rno), fee(t.fee) {
+        strcpy(name, t.name);
+    }
 
-    void display();
+    void display(){
+        cout << endl << rno << '\t' << name << '\t' << fee;
+    }
 };
-
-student :: student(int no, const char n[], double f){
-    rno = no;
-    strcpy(name,n);
-    fee = f;
-}
-
-student :: student(const student &t){
-    rno = t.rno;
-    strcpy(name, t.name);
-    fee = t.fee;
-}
-
-void student::display(){
-    cout << endl << rno << "\t" << name << "\t" << fee;
-}
 
 int main(){
     student s(1001, "Manjeet", 10000);
