@@ -1,16 +1,35 @@
 {
-    "configurations": [
+  "configurations": [
+    {
+      "type": "chrome",
+      "name": "http://127.0.0.1:3000/html/test.html",
+      "request": "launch",
+      "url": "http://127.0.0.1:3000/html/test.html"
+    },
+    {
+      "type": "chrome",
+      "name": "http://127.0.0.1:3000/html/index.html",
+      "request": "launch",
+      "url": "http://127.0.0.1:3000/html/index.html"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/devan/OneDrive/Documents/code",
+      "program": "c:/Users/devan/OneDrive/Documents/code/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
         {
-            "type": "chrome",
-            "name": "http://127.0.0.1:3000/html/test.html",
-            "request": "launch",
-            "url": "http://127.0.0.1:3000/html/test.html"
-        },
-        {
-            "type": "chrome",
-            "name": "http://127.0.0.1:3000/html/index.html",
-            "request": "launch",
-            "url": "http://127.0.0.1:3000/html/index.html"
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
         }
-    ]
+      ]
+    }
+  ]
 }
