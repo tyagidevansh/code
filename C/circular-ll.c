@@ -18,50 +18,42 @@ void insert(Node** last, int data) {
 
     if (*last == NULL) {
         *last = newNode;
-        newNode->next = newNode;
+        newNode->next = newNode;  
     } else {
         newNode->next = (*last)->next;
         (*last)->next = newNode;
-        *last = newNode;
+        *last = newNode;  
     }
 }
 
 void delete(Node** last, int data) {
-    if (*last == NULL) {
-        printf("List empty!\n");
+    if (*last == NULL){
+        printf("List empty! \n");
         return;
     }
 
-    Node* first = (*last)->next;
+    Node* first = (*last) -> next;
     Node* temp = first;
-    Node* prev = *last;
+    Node* prev = (*last);
 
     do {
-        if (temp->data == data) {
-            prev->next = temp->next;
-            if (temp == first) {
-                if (temp->next == temp) {
+        if (temp -> data = data){
+            prev -> next = temp -> next;
+            if (temp == first){
+                if (temp->next = temp){
                     *last = NULL;
-                } else {
-                    (*last)->next = temp->next;
-                    first = temp->next;
                 }
             }
-            free(temp);
-            return;
-        } else {
-            prev = temp;
-            temp = temp->next;
-        }
-    } while (temp != first);
+        } 
 
-    printf("Element not present in this list!\n");
+    } while (temp != first);
+    
 }
 
 void display(Node** last) {
-    if (*last == NULL) {
-        printf("List is empty!\n");
-        return;
+    if (last == NULL){
+        printf("List is empty!");
+        exit(1);
     }
 
     Node* first = (*last)->next;
@@ -69,10 +61,10 @@ void display(Node** last) {
 
     do {
         printf("%d -> ", temp->data);
-        temp = temp->next;
-    } while (temp != first);
+        temp = temp -> next;
+    } while(temp != first);
 
-    printf("First element\n");
+    printf("First element");
 }
 
 int main() {
@@ -90,6 +82,6 @@ int main() {
     delete(&last, 15);
 
     display(&last);
-
+    
     return 0;
 }
