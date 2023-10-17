@@ -1,15 +1,4 @@
-/*
-implement a class string containing the following functions:
-a) overload + operator to carry out the concatenation of strings
-b) overload = to carry out string copy
-c) overload <= to carry out the comparison of strings
-d) function to display the length of the string
-e) function tolower() to convert upper case letters to lower case
-f) function toupper() to convert lower case letters to upper case
-*/
-
 #include <iostream>
-
 using namespace std;
 
 class String{
@@ -59,22 +48,36 @@ public:
     void print(){
         cout << str << endl;
     }
-
 };
 
 int main(){
-    String s1("Hello, ");
-    String s2("World!");
+    String s1("Lorem ");
+    String s2("Ipsum");
+
+    cout << "Original strings s1 and s2:" << endl;
+    s1.print();
+    s2.print();
 
     String s3;
-    //s3 = s1 + s2;
-    //s3 = s1;
-    
+    s3 = s1 + s2;
+    cout << "Concatenated string:";
+    s3.print();
+
+    cout << "Is s1 <= s2? (1 if true) " << (s1 <= s2) << endl;
+
+    cout << "Length of the concatenated string: " << s3.len() << endl;
+
     s1.toLower();
+    cout << "s1 to lowercase: ";
     s1.print();
 
     s2.toUpper();
+    cout << "s2 to uppercase: ";
     s2.print();
 
     return 0;
 }
+
+
+
+
