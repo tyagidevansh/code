@@ -4,21 +4,31 @@ using namespace std;
 
 int length_lcs(const string& A, string& B){
     int len_lcs = 0;
+    int n = 0;
+    
     for (size_t i = 0; i < A.length(); i++) {
-        for (size_t j = 0; j < B.length(); j++) {
+        for (size_t j = n; j < B.length(); j++) {
             if (A[i] == B[j]) {
                 len_lcs++;
                 break;
             }
         }
-        B.erase(B.begin());
+        n++;
     }
     return len_lcs;
 }
 
 int main(){
-    string A = "CRINGE";
-    string B = "ENGINE";
+    string A = "AquaVitae";
+    string B = "AruTaVae";
+
+    if (B.length() > A.length()){
+        B.swap(A);
+    }
 
     cout << "Length of LCS: " << length_lcs(A, B);
 }
+
+
+
+
