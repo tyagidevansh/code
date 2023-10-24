@@ -1,0 +1,10 @@
+import numpy
+
+size = int(input())
+matrix = []
+for i in range(size):
+    row = list(map(float, input().split()))
+    matrix.append(row)
+
+print(numpy.linalg.det(matrix))
+

@@ -7,20 +7,18 @@ int length_lcs(const string& A, string& B){
     for (size_t i = 0; i < A.length(); i++) {
         for (size_t j = 0; j < B.length(); j++) {
             if (A[i] == B[j]) {
-                cout << B << endl;
                 len_lcs++;
-                B.erase(B.begin());
-                cout << B << endl;
                 break;
             }
         }
+        B.erase(B.begin());
     }
     return len_lcs;
 }
 
 int main(){
-    string A = "HOTDOG";
-    string B = "HOTEL";
+    string A = "CRINGE";
+    string B = "ENGINE";
 
-    cout << length_lcs(A, B);
+    cout << "Length of LCS: " << length_lcs(A, B);
 }

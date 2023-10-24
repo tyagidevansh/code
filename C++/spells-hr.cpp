@@ -62,7 +62,19 @@ string SpellJournal::journal = "";
 
 void counterspell(Spell *spell) {
 
-  /* Enter your code here */
+    if(dynamic_cast<Fireball*>(spell))
+        static_cast<Fireball*>(spell) -> revealFirepower();
+    else if (dynamic_cast<Frostbite*>(spell))
+        static_cast<Frostbite*>(spell) -> revealFrostpower();
+    else if (dynamic_cast<Thunderstorm*>(spell))
+        static_cast<Thunderstorm*>(spell) -> revealThunderpower();
+    else if  (dynamic_cast<Waterbolt*>(spell))
+        static_cast<Waterbolt*>(spell) -> revealWaterpower();
+    else {
+        string spellName = spell -> revealScrollName();
+        string journalName = SpellJournal::read();
+        
+    }
 
 }
 

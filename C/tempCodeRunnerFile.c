@@ -1,22 +1,35 @@
 #include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 
-int main() {
-    char s[100];
+void insertionSort(int arr[], int n){
+    int i, key, j;
+    for (i = 1; i < n; i++){
+        key = arr[i];
+        j = i - 1;
 
-    printf("Enter string: ");
-    fgets(s, sizeof(s), stdin);
-
-    printf("Original string: %s", s);
-
-    for (int i = 0; s[i] != '\0'; i++) {
-        if ((i == 0 || s[i - 1] == ' ') && isalpha(s[i])) {
-            s[i] = toupper(s[i]);
-        }
+        while ( j >= 0 && arr[j] < key) {
+        arr[j+1] = arr[j];
+        j--;
+    }
+    arr[j+1] = key;
     }
 
-    printf("Modified string: %s", s);
+    
+}
 
-    return 0;
+int main(){
+    int n;
+    printf("Enter the length of the array: ");
+    scanf("%d", &n);
+
+    int arr[n];
+    printf("Enter the array: ");
+    for (int i = 0; i < n; i++){
+        scanf("%d", &arr[i]);
+    }
+
+    insertionSort(arr, n);
+
+    for (int i = 0; i < n; i++){
+        printf("%d", arr[i]);
+    }
 }

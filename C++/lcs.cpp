@@ -10,8 +10,8 @@ int lcs(char* X, char* Y, int m, int n, vector<vector<int>>& dp){
 }
 
 int main(){
-    char X[] = "SUSSY";
-    char Y[] = "SUSSUSAMONGUS";
+    char X[] = "CRINGE";
+    char Y[] = "ENGINE";
 
     int m = strlen(X);
     int n = strlen(Y);
