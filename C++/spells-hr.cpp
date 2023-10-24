@@ -60,6 +60,24 @@ class SpellJournal {
 }; 
 string SpellJournal::journal = "";
 
+int length_lcs(string X, string Y, int m, int n){
+    int L[m + 1][n + 1];
+
+    for (int i = 0; i <= m; i++) {
+        for (int j = 0; j <= n; j++) {
+            if (i == 0 || j == 0)
+                L[i][j] = 0;
+
+            else if (X[i - 1] == Y[j - 1])
+                L[i][j] = L[i - 1][j - 1] + 1;
+
+            else 
+                L[i][j] = max(L[i - 1][j], L[i][j - 1]);
+        }
+    }
+    return L[m][n];
+}
+
 void counterspell(Spell *spell) {
 
     if(dynamic_cast<Fireball*>(spell))
@@ -80,19 +98,6 @@ void counterspell(Spell *spell) {
 
 }
 
-int length_lcs(const string& text1, const string& text2, int i, int j){
-
-    if (i == 0 || j == 0){
-        return 0;
-    }
-    if (text1[i-1] == text2[j-1]) {
-        return 1 + length_lcs(text1, text2, i-1, j-1);
-    } else {
-        int without_i = length_lcs(text1, text2, i - 1, j);
-        int without_j = length_lcs(text1, text2, i, j - 1);
-        return max(without_i, without_j);
-    }
-}
 
 class Wizard {
     public:
