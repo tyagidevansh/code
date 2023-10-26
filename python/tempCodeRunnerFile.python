@@ -1,10 +1,35 @@
-import numpy
+def f(x, y):
+    return x + y
 
-size = int(input())
-matrix = []
-for i in range(size):
-    row = list(map(float, input().split()))
-    matrix.append(row)
+def euler(h, x, y, target):
+    while x < target:
+        y = y + h * f(x, y)
+        x += h
+    return y
 
-print(numpy.linalg.det(matrix))
+def euler_modified(h, x, y, target, y0):
+    while x < target:
+        y1 = f(x, y)
+        y = y + h/2 * (y1 + y0)
+        y0 = y1
+        x += h
+    return y
 
+h = 0.2
+x, y, y0 = 0, 0, 0
+print("h =", h)
+
+target = 0.4
+print("Euler's method:")
+print("Approximate solution at 0.4:", euler(h, x, y, target))
+
+target = 0.6
+print("Approximate solution at 0.6:", euler(h, x, y, target))
+
+print("Modified Euler's method:")
+
+target = 0.4
+print("Approximate solution at 0.4:", euler_modified(h, x, y, target, y0))
+
+target = 0.6
+print("Approximate solution at 0.6:", euler_modified(h, x, y, target, y0))
