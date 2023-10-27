@@ -28,17 +28,6 @@ TreeNode* insert(TreeNode* root, int data) {
     return root;
 }
 
-TreeNode* insert(TreeNode* root, int data) {
-    if (root == NULL) {
-        return createNode(data);
-    } else {
-        if (root -> left == NULL){
-            root -> left = insert(root -> left, data);
-        }else{
-            root -> right = insert(root -> right, data);
-        }
-    }
-}
 void inOrderTraversal(TreeNode* root) {
     if (root != NULL) {
         inOrderTraversal(root->left);

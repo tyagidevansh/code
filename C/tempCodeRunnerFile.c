@@ -1,35 +1,95 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-void insertionSort(int arr[], int n){
-    int i, key, j;
-    for (i = 1; i < n; i++){
-        key = arr[i];
-        j = i - 1;
+typedef struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+} Node;
 
-        while ( j >= 0 && arr[j] < key) {
-        arr[j+1] = arr[j];
-        j--;
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode -> data = data;
+    newNode -> left = NULL;
+    newNode -> right = NULL;
+    return newNode;
+}
+
+Node* insert(Node* root, int data){
+    if (root == NULL) {
+        return createNode(data);
     }
-    arr[j+1] = key;
+
+    if (data <= root -> data) 
+        root->left = insert(root->left, data);
+    else if (data > root -> data)
+        root -> right = insert(root->right, data);
+
+    return root;
+}
+
+void inOrderTraversal(Node* node) {
+    if (node != NULL){
+    inOrderTraversal(node->left);
+    printf("%d ", node -> data);
+    inOrderTraversal(node->right);
+    }
+}
+
+void preOrderTraversal(Node* node) {
+    if (node != NULL){
+    printf("%d ", node -> data);
+    preOrderTraversal(node->left);
+    preOrderTraversal(node->right);
+    }
+}
+
+void postOrderTraversal(Node* node) {
+    if (node != NULL){
+    postOrderTraversal(node->left);
+    postOrderTraversal(node->right);
+    printf("%d ", node -> data);
+    }
+}
+
+Node* search(Node* root, int key) {
+    if (root == NULL){
+        return NULL;
     }
 
-    
+    if (root -> data == key){
+        return root;
+    } else if (root -> data > key) {
+        return search(root -> left, key);
+    } else {
+        return search(root -> right, key);
+    }
 }
 
 int main(){
-    int n;
-    printf("Enter the length of the array: ");
-    scanf("%d", &n);
+    Node* root = NULL;
+    root = insert(root, 50);
+    root = insert(root, 30);
+    root = insert(root, 70);
+    root = insert(root, 20);
+    root = insert(root, 40);
+    root = insert(root, 60);
+    root = insert(root, 80);
 
-    int arr[n];
-    printf("Enter the array: ");
-    for (int i = 0; i < n; i++){
-        scanf("%d", &arr[i]);
+    printf("In-order traversal: \n");
+    inOrderTraversal(root);
+    printf("\nPre-order traversal: \n");
+    preOrderTraversal(root);
+    printf("\nPost-order traversal: \n");
+    postOrderTraversal(root);
+    printf("\n");
+
+    Node* searchResult = search(root, 100);
+    if (searchResult != NULL){
+        printf("Element found: %d ", searchResult -> data);
+    } else {
+        printf("Element not found!");
     }
 
-    insertionSort(arr, n);
-
-    for (int i = 0; i < n; i++){
-        printf("%d", arr[i]);
-    }
+    return 0;
 }

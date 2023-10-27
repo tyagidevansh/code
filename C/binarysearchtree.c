@@ -1,73 +1,105 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct TreeNode {
+typedef struct Node {
     int data;
-    struct TreeNode* left;
-    struct TreeNode* right;
-} TreeNode;
+    struct Node* left;
+    struct Node* right;
+} Node;
 
-TreeNode* createNode(int data) {
-    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
-    newNode->data = data;
-    newNode->left = NULL;
-    newNode->right = NULL;
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode -> data = data;
+    newNode -> left = NULL;
+    newNode -> right = NULL;
     return newNode;
 }
 
-TreeNode* insert(TreeNode* root, int data) {
+Node* insert(Node* root, int data){
     if (root == NULL) {
         return createNode(data);
-    } else {
-        if (data <= root->data) {
-            root->left = insert(root->left, data);
-        } else {
-            root->right = insert(root->right, data);
-        }
     }
+
+    if (data <= root -> data) 
+        root->left = insert(root->left, data);
+    else if (data > root -> data)
+        root -> right = insert(root->right, data);
+
     return root;
 }
 
-void inOrderTraversal(TreeNode* root) {
-    if (root != NULL) {
-        inOrderTraversal(root->left);
-        printf("%d ", root->data);
-        inOrderTraversal(root->right);
+void inOrderTraversal(Node* node) {
+    if (node != NULL){
+    inOrderTraversal(node->left);
+    printf("%d ", node -> data);
+    inOrderTraversal(node->right);
     }
 }
 
-void preOrderTraversal(TreeNode* root) {
-    if (root != NULL) {
-        printf("%d ", root->data);
-        preOrderTraversal(root->left);
-        preOrderTraversal(root->right);
+void preOrderTraversal(Node* node) {
+    if (node != NULL){
+    printf("%d ", node -> data);
+    preOrderTraversal(node->left);
+    preOrderTraversal(node->right);
     }
 }
 
-void postOrderTraversal(TreeNode* root) {
-    if (root != NULL) {
-        postOrderTraversal(root->left);
-        postOrderTraversal(root->right);
-        printf("%d ", root->data);
+void postOrderTraversal(Node* node) {
+    if (node != NULL){
+    postOrderTraversal(node->left);
+    postOrderTraversal(node->right);
+    printf("%d ", node -> data);
     }
 }
 
-int main() {
-    struct TreeNode* root = createNode(1);
-    root = insert(root, 2);
-    root = insert(root, 3);
-    root = insert(root, 4);
-    root = insert(root, 5);
+Node* search(Node* root, int key) {
+    if (root == NULL){
+        return NULL;
+    }
 
-    printf("In-order traversal: ");
+    if (root -> data == key){
+        return root;
+    } else if (root -> data > key) {
+        return search(root -> left, key);
+    } else {
+        return search(root -> right, key);
+    }
+}
+
+Node* delete(Node* root, int val) {
+    if (val < root -> data) {
+        return delete(root->left, val);
+    } else if (val > root -> data) {
+        return delete(root->right, val);
+    } else {
+        iPre = inOrderPredecessor(root);
+    }
+}
+
+int main(){
+    Node* root = NULL;
+    root = insert(root, 50);
+    root = insert(root, 30);
+    root = insert(root, 70);
+    root = insert(root, 20);
+    root = insert(root, 40);
+    root = insert(root, 60);
+    root = insert(root, 80);
+
+    printf("In-order traversal: \n");
     inOrderTraversal(root);
-    printf("\n");
-
-    printf("Pre-order traversal: ");
+    printf("\nPre-order traversal: \n");
     preOrderTraversal(root);
-    printf("\n");
-
-    printf("Post-order traversal: ");
+    printf("\nPost-order traversal: \n");
     postOrderTraversal(root);
     printf("\n");
+
+    Node* searchResult = search(root, 100);
+    if (searchResult != NULL){
+        printf("Element found: %d ", searchResult -> data);
+    } else {
+        printf("Element not found!");
+    }
+
+    return 0;
 }

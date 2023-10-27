@@ -23,7 +23,7 @@ float euler_modified(float h, float x, float y, float target, float y0){
 }
 
 int main(){
-    float h = 0.2;
+    float h = 0.02;
     float x = 0, y = 0, y0 = 0;
     cout << "h = " << h << endl;
     cout << "Euler's method: " << endl;
