@@ -66,13 +66,44 @@ Node* search(Node* root, int key) {
     }
 }
 
-Node* delete(Node* root, int val) {
-    if (val < root -> data) {
-        return delete(root->left, val);
-    } else if (val > root -> data) {
-        return delete(root->right, val);
+Node* deleteNode(Node* root, int val) {
+    if (root == NULL)
+        return root;
+    
+    if (root->data > val) {
+        root->left = deleteNode(root->left, val);
+        return root;
+    } else if (root->data < val) {
+        root->right = deleteNode(root->right, val);
+    }
+
+    if (root->left == NULL) {
+        Node* temp = root->right;
+        free(root);
+        return temp;
+    } else if (root->right == NULL) {
+        Node* temp = root->left;
+        free(root);
+        return temp;
     } else {
-        iPre = inOrderPredecessor(root);
+        Node* sp = root;
+        
+        Node* succ = root -> right;
+        while (succ -> left != NULL) {
+            sp = succ;
+            succ = succ -> left;
+        }
+
+        if (sp != root) 
+            sp->left = succ->right;
+        else
+            sp->right = succ->right;
+        
+        root->data = succ->data;
+
+        free(succ);
+        return root;
+
     }
 }
 
@@ -100,6 +131,11 @@ int main(){
     } else {
         printf("Element not found!");
     }
+
+    root = deleteNode(root, 20);
+
+    printf("In-order traversal: \n");
+    inOrderTraversal(root);
 
     return 0;
 }
