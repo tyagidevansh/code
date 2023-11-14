@@ -55,7 +55,7 @@ void postOrderTraversal(Node* node) {
 Node* search(Node* root, int key) {
     if (root == NULL){
         return NULL;
-    }
+    } 
 
     if (root -> data == key){
         return root;
@@ -77,7 +77,7 @@ Node* deleteNode(Node* root, int val) {
         root->right = deleteNode(root->right, val);
     }
 
-    if (root->left == NULL) {
+    if (root->left == NULL) {   
         Node* temp = root->right;
         free(root);
         return temp;
