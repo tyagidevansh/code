@@ -1,11 +1,17 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	int x = 10, y = 20;
-	int* ptr = &x;
-	int &ref = y;
-	*ptr++;
-	ref++;
-	cout << x << " "<< y;
+int main() {
+    string s = "hello world";
+
+    int arr[26] = {0};
+
+    for (int i = 0; i < s.size(); i++) {
+        arr[s[i] - 'a']++;
+    }
+
+    char ch = 'l';
+
+    cout<<"The count of ch is " << arr[ch-'a']<<endl;
+    return 0;
 }
