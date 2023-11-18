@@ -53,10 +53,10 @@ void postOrderTraversal(TreeNode* root) {
 }
 
 int main() {
-    struct TreeNode* root = createNode(1);
+    struct TreeNode* root = createNode(10);
     root = insert(root, 2);
-    root = insert(root, 3);
-    root = insert(root, 4);
+    root = insert(root, 31);
+    root = insert(root, 17);
     root = insert(root, 5);
 
     printf("In-order traversal: ");
