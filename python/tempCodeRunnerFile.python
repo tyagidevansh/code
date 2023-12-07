@@ -1,35 +1,20 @@
-def f(x, y):
-    return x + y
-
-def euler(h, x, y, target):
-    while x < target:
-        y = y + h * f(x, y)
-        x += h
-    return y
-
-def euler_modified(h, x, y, target, y0):
-    while x < target:
-        y1 = f(x, y)
-        y = y + h/2 * (y1 + y0)
-        y0 = y1
-        x += h
-    return y
-
-h = 0.2
-x, y, y0 = 0, 0, 0
-print("h =", h)
-
-target = 0.4
-print("Euler's method:")
-print("Approximate solution at 0.4:", euler(h, x, y, target))
-
-target = 0.6
-print("Approximate solution at 0.6:", euler(h, x, y, target))
-
-print("Modified Euler's method:")
-
-target = 0.4
-print("Approximate solution at 0.4:", euler_modified(h, x, y, target, y0))
-
-target = 0.6
-print("Approximate solution at 0.6:", euler_modified(h, x, y, target, y0))
+def slidingwindow(arr, x):
+    start = 0
+    end = 0
+    min_len = 1000
+    temp = 0
+    
+    for i in range(len(arr)):
+        temp = temp + arr[i]
+        end+=1
+        while start < end and temp >= x:
+            if len(arr[start:end]) < min_len:
+                min_len = len(arr[start:end])
+            temp = temp - arr[start]
+            start = start + 1 
+    
+    return min_len
+    
+arr = [1,2,3,4,5,6]
+x = 7
+print(slidingwindow(arr, x))

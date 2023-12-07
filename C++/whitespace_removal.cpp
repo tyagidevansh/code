@@ -1,6 +1,3 @@
-//Write a program to perform the deletion of white spaces such as horizontal tab, vertical tab, space, line feed,
-//new line, carriage return from a text file and store the contents of the file without any white spaces in another file.
-
 #include <iostream>
 #include <fstream>
 #include <string>

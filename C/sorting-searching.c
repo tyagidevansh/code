@@ -1,27 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-void generateRandomArray(int arr[], int n);
-void printArray(int arr[], int n);
-void bubbleSort(int arr[], int n);
-void selectionSort(int arr[], int n);
-void mergeSort(int arr[], int left, int right);
-void insertionSort(int arr[], int n);
-void quickSort(int arr[], int low, int high);
-void heapSort(int arr[], int n);
-void binarySearch(int arr[], int n, int search);
-
 void generateRandomArray(int arr[], int n) {
     for(int i = 0; i < n; i++){
         arr[i] = rand() % 100;
-    }
-}
+    }}
 
 void printArray(int arr[], int n) {
     for (int i = 0; i < n; i++){
         printf("%d ", arr[i]);
     }
-    printf("\n \n");
+    printf("\n");
 }
 
 void swap(int arr[], int i, int j){
@@ -37,10 +25,7 @@ void bubbleSort(int arr[], int n){
         for (int j = 0; j < n - i - 1; j++){
             if (arr[j] > arr[j+1]){
                 swap(arr, j, j+1);
-            }
-        }
-    }
-}
+            }}}}
 
 void selectionSort(int arr[], int n) {
     int temp, min, cur;
@@ -51,15 +36,12 @@ void selectionSort(int arr[], int n) {
         for (int j = i + 1; j < n; j++) {
             if (arr[j] < arr[min]) {
                 min = j;
-            }
-        }
+            }}
 
         temp = arr[i];
         arr[i] = arr[min];
         arr[min] = temp;
-    }
-}
-
+    }}
 
 void merge(int arr[], int left, int middle, int right){
     int i, j, k;
@@ -109,8 +91,7 @@ void mergeSort(int arr[], int left, int right){
         mergeSort(arr, middle+1, right);
 
         merge(arr, left, middle, right);
-    }
-}
+    }}
 
 void insertionSort(int arr[], int n) {
     int i,j,key;
@@ -123,8 +104,7 @@ void insertionSort(int arr[], int n) {
             j = j - 1;
         }
         arr[j + 1] = key;
-    }
-}
+    }}
 
 int partition(int arr[], int low, int high) {
     int pivot = arr[high];
@@ -146,8 +126,7 @@ void quickSort(int arr[], int low, int high) {
 
         quickSort(arr, low, pi-1);
         quickSort(arr, pi + 1, high);
-    }
-}
+    }}
 
 void heapify(int arr[], int n, int i) {
     int largest = i;
@@ -163,8 +142,7 @@ void heapify(int arr[], int n, int i) {
     if (largest != i) {
         swap(arr, i, largest);
         heapify(arr, n, largest);
-    }
-}
+    }}
 
 void heapSort(int arr[], int n) {
     for (int i = n/2 - 1; i >= 0; i--) 
@@ -173,23 +151,7 @@ void heapSort(int arr[], int n) {
     for (int i = n -  1; i >= 0; i--) {
         swap(arr, 0, i);
         heapify(arr, i, 0);
-    }
-}
-
-// void binarySearch(int arr[], int n, int search){
-//     while(n>0){
-//         if (arr[n] > search){
-//             n = n/2;
-//         } else if (arr[n] < search){
-//             n = n+n/2;
-//         } else {
-//             printf("Element with value %d found at %d. \n", search, n);
-//             return;
-//         }
-//     }
-//     printf("%d does not exist within this array ", n);
-// }
-
+    }}
 int main(){
     int n = 10, search;    
     int arr[n];
@@ -238,3 +200,4 @@ int main(){
 
     return 0;
 }
+

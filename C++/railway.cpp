@@ -1,4 +1,3 @@
-//Develop railway tickets booking system using all concepts of object oriented programming.
 
 #include <iostream>
 #include <vector>
@@ -89,15 +88,11 @@ int main() {
 
     printf("----------------Railway Ticket Booking System----------------\n");
 
-    while (true) {
-        
-    }
+    FirstClassTicket firstClassTicket1("Ramesh", 1);
+    FirstClassTicket firstClassTicket2("Rajesh", 2);
 
-    FirstClassTicket firstClassTicket1("John Doe", 1);
-    FirstClassTicket firstClassTicket2("Alice Smith", 2);
-
-    SecondClassTicket secondClassTicket1("Bob Johnson", 3);
-    SecondClassTicket secondClassTicket2("Eva Williams", 4);
+    SecondClassTicket secondClassTicket1("Rahul", 3);
+    SecondClassTicket secondClassTicket2("Raj", 4);
 
     bookingSystem.bookTicket(&firstClassTicket1);
     bookingSystem.bookTicket(&firstClassTicket2);

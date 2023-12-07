@@ -1,5 +1,3 @@
-//Develop student's record system all concepts of object oriented programming.
-
 #include <iostream>
 #include <vector>
 

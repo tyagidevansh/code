@@ -1,5 +1,3 @@
-//Implement Employee management system which includes Employee Table, Insert new entries, delete the entries and search a record. Use array and hashing.
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
