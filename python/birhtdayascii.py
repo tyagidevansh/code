@@ -34,3 +34,5 @@ def image_to_ascii(image_path, output_width=100, characters="@%#*+=-:. "):
 
 image_path = r"C:\Users\devan\OneDrive\Pictures\Screenshots\IMG-20230921-WA0009.jpg"
 image_to_ascii(image_path)
+
+
