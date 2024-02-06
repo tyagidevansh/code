@@ -39,11 +39,12 @@ class stack_impl {
 public class stack {
     public static void main(String args[]) {
         stack_impl Stack = new stack_impl();
+        Stack.push(5);
         Stack.push(10);
         Stack.push(15);
         Stack.push(20);
-        Stack.push(30);
 
+        Stack.pop();
         Stack.pop();
         System.out.println("Top element of stack: "+Stack.peek());
     }
