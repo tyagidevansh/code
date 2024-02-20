@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <div>
+            <label for = "fname"> First Name: </label>
+            <input id = "fname" type = "text"/> 
+        </div>
+        <div>
+            <label for = "lname"> Last Name: </label>
+            <input id = "lname" type = "text"/>
+        </div>
+        <div> 
+            <input id = "submit" type = "submit"/>
+        </div>
+    </form>
+    <p></p>
+
+    <script>
+        const form = document.querySelector("form");
+        const fname = document.getElementById("fname");
+        const lname = document.getElementById("lname");
+        const para = document.querySelector("p");
+
+        form.addEventListener("submit", (e) => {
+            if (fname.value === "" || lname.value === "") {
+                e.preventDefault();
+                para.textContent = "You need to fill in both names!";
+            }
+        });
+    </script>
+
+</body>
+</html>
