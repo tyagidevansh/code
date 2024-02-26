@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synchronous JavaScript Limitations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #content {
+            display: none;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        input {
+            padding: 8px;
+            font-size: 16px;
+        }
+        #loading {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Synchronous JavaScript Limitations</h2>
+    <p>Enter your name and click the button to simulate fetching data synchronously.</p>
+    <input type="text" id="nameInput" placeholder="Enter your name">
+    <button id="fetchButton">Fetch Data Synchronously</button>
+    <div id="loading">
+        <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Loading...">
+        <p>Loading...</p>
+    </div>
+    <div id="content">
+        <h3>Data Received!</h3>
+        <p>Welcome, <span id="nameSpan"></span>! This content was fetched from the server.</p>
+    </div>
+
+    <script>
+        document.getElementById('fetchButton').addEventListener('click', function() {
+            var name = document.getElementById('nameInput').value;
+            if (!name) {
+                alert('Please enter your name.');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            // Simulate delay
+            var start = Date.now();
+            while (Date.now() - start < 5000) {}
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('nameSpan').textContent = name;
+        });
+    </script>
+</body>
+</html>
