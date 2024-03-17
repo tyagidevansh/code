@@ -19,8 +19,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/devan/OneDrive/Documents/code",
-      "program": "c:/Users/devan/OneDrive/Documents/code/build/Debug/outDebug",
+      "cwd": "c:/Users/devan/OneDrive/Documents/code/C++",
+      "program": "c:/Users/devan/OneDrive/Documents/code/C++/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
