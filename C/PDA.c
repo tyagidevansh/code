@@ -32,7 +32,7 @@ void pop(PDA *pda) {
 
 bool isEmpty(PDA *pda) {
     return (pda->top == 0);
-}
+}   
 
 void processInput(PDA *pda, const char* input) {
     int i = 0;
