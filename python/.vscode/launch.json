@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/devan/OneDrive/Documents/code/python",
-      "program": "c:/Users/devan/OneDrive/Documents/code/python/build/Debug/outDebug",
+      "cwd": "c:/Users/devan/Documents/code/python",
+      "program": "c:/Users/devan/Documents/code/python/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
