@@ -1,0 +1,39 @@
+.clock{
+    position: absolute; /* Add this line */
+    top: 50%; /* Add this line */
+    left: 50%; /* Add this line */
+    transform: translate(-50%, -50%); /* Add this line */
+    display: flex;
+    width:200px;
+    height:200px;
+    border:2px solid #333;
+    border-radius:100%;
+}
+
+.hour-hand, .minute-hand, .second-hand {
+    position: absolute;
+    background-color: #333;
+    transform-origin: center;
+    left: 50%; /* Set left position to 50% */
+}
+
+.hour-hand {
+    width: 5px;
+    height: 50px;
+    top: calc(50% - 50px); /* Adjust top position */
+    transform-origin: bottom center; /* Adjusted transform origin */
+}
+
+.minute-hand {
+    width: 3px;
+    height: 70px;
+    top: calc(50% - 70px); /* Adjust top position */
+    transform-origin: bottom center; /* Adjusted transform origin */
+}
+
+.second-hand {
+    width: 2px;
+    height: 90px;
+    top: calc(50% - 90px); /* Adjust top position */
+    transform-origin: bottom center; /* Adjusted transform origin */
+}

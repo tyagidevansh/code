@@ -1,114 +1,80 @@
-class StackImpl {
-    int top;
-    int max_size = 100;
-    int[] arr = new int[max_size];
+class Stack {
+    int size = 100;
+    int[] stack = new int[100];
+    int idx;
 
-    StackImpl() {
-        top = -1;
+    Stack() {
+        idx = -1;
     }
 
-    void push(int val) {
-        if (top == max_size - 1) {
+    void push(int data) {
+        if (idx == size) {
             System.out.println("Stack overflow!");
             return;
         }
-
-        arr[++top] = val;
-        System.out.println(val + " pushed into the stack");
+        idx++;
+        stack[idx] = data;
+        System.out.println(data + " pushed into the stack"); 
     }
 
-    void pop() {
-        if (top == -1) {
+    int pop() {
+        if (idx == -1) {
             System.out.println("Stack underflow!");
-            return;
+            return -1;
         }
-        top--;
-        System.out.println("Element popped from stack");
+        int val = stack[idx];
+        idx--;
+        return val;
     }
 
     int peek() {
-        if (top == -1) {
-            System.out.println("Stack is empty");
-            return -1;
-        }
-        return arr[top];
+        return stack[idx];
     }
 }
 
-class QueueImpl {
-    int front, rear, size;
+class Queue {
     int capacity = 100;
-    int[] array = new int[capacity];
+    int[] queue = new int[capacity];
+    int front, rear, size;
 
-    public QueueImpl() {
+    Queue() {
         front = size = 0;
-        rear = capacity - 1;
+        rear = -1;
     }
 
-    boolean isFull(QueueImpl queue) {
-        return (queue.size == queue.capacity);
-    }
+    void enqueue(int data) {
+        rear++;
+        queue[rear] = data;
+        size++;
 
-    boolean isEmpty(QueueImpl queue) {
-        return (queue.size == 0);
-    }
-
-    void enqueue(int item) {
-        if (isFull(this))
-            return;
-        this.rear = (this.rear + 1) % this.capacity;
-        this.array[this.rear] = item;
-        this.size = this.size + 1;
-        System.out.println(item + " enqueued to queue");
+        System.out.println(data + " added to the queue");
     }
 
     int dequeue() {
-        if (isEmpty(this))
-            return Integer.MIN_VALUE;
-
-        int item = this.array[this.front];
-        this.front = (this.front + 1) % this.capacity;
-        this.size = this.size - 1;
-        return item;
+        if (size == 0) {
+            System.out.println("Queue is empty");
+            return -1;
+        }
+        size--;
+        int val = queue[front];
+        front++;
+        return val;
     }
 
-    int front() {
-        if (isEmpty(this))
-            return Integer.MIN_VALUE;
-
-        return this.array[this.front];
-    }
-
-    int rear() {
-        if (isEmpty(this))
-            return Integer.MIN_VALUE;
-
-        return this.array[this.rear];
-    }
 }
 
 public class StackAndQueue {
-    public static void main(String args[]) {
-        // Stack demonstration
-        StackImpl stack = new StackImpl();
-        stack.push(15);
-        stack.push(20);
-        stack.push(45);
-        stack.push(50);
+    public static void main(String[] args) {
+        Stack stack = new Stack();
+        stack.push(1);
+        stack.push(2);
+        System.out.println(stack.pop());
+        System.out.println(stack.pop());
 
-        stack.pop();
-        stack.pop();
-        System.out.println("Top element of stack: " + stack.peek());
-
-        // Queue demonstration
-        QueueImpl queue = new QueueImpl();
-        queue.enqueue(5);
-        queue.enqueue(4);
-        queue.enqueue(3);
+        Queue queue = new Queue();
+        queue.enqueue(1);
         queue.enqueue(2);
-
-        System.out.println(queue.dequeue() + " dequeued from queue");
-        System.out.println("Front item is " + queue.front());
-        System.out.println("Rear item is " + queue.rear());
+        System.out.println(queue.dequeue());
+        System.out.println(queue.dequeue());
     }
 }
