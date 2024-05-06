@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-class CustomException extends exceptionExample {
+class CustomException extends Exception {
     public CustomException (String message) {
         super(message);
     }
@@ -13,10 +13,16 @@ public class exceptionExample {
         }
     }
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter a positive number");
+        int input = sc.nextInt();
+        sc.close();
         try {
-            testMethod(-1);
+            testMethod(input);
         } catch (CustomException e) {
             System.out.println("Custom exception : " + e);
+        } finally {
+            System.out.println("Program execution complete");
         }
     }    
 }
