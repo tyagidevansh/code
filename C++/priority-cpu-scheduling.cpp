@@ -8,7 +8,7 @@ int main() {
   int priority[SIZE] = {2, 6, 3, 5, 7};
   int arrival[SIZE] = {0, 1, 2, 4, 6};
   int burst[SIZE] = {3, 5, 4, 2, 9};
-  int completionTime[SIZE] = {};
+  int completionTime[SIZE] = {}; 
   int completed[SIZE] = {0, 0, 0, 0, 0};
 
   int currentTime = burst[0] + arrival[0];
